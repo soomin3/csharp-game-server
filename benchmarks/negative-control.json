@@ -1,0 +1,38 @@
+{
+  "scenario": "Server accepts login and reads moves but never confirms movement",
+  "verified": true,
+  "expectedLoadSuccess": false,
+  "expectedLoaderExitCode": 1,
+  "loaderExitCode": 1,
+  "loaderSha256": "F624C06B63E89B24D43B8F3027A71CFE0F8A5570B3FC42F42AEE857B6407C0A9",
+  "stubStats": {
+    "accepted": 2,
+    "logins": 2,
+    "roomReplies": 2,
+    "moveRequestsConsumed": 42,
+    "moveNotificationsSent": 0,
+    "closed": 2,
+    "errors": 0
+  },
+  "loadResult": {
+    "success": false,
+    "requestedClients": 2,
+    "healthyAtStart": 2,
+    "healthyAtEnd": 2,
+    "clientsWithMeasuredMoves": 2,
+    "clientsWithConfirmedMoves": 0,
+    "errorCount": 0,
+    "measurementStartUtc": "2026-10-28T13:51:23.4481449+09:00",
+    "measurementEndUtc": "2026-10-28T13:51:24.453791+09:00",
+    "durationSeconds": 1.0056461,
+    "intervalMs": 50,
+    "rooms": 1,
+    "seed": 42,
+    "packetsReceived": 0,
+    "bytesReceived": 0,
+    "packetsSent": 39,
+    "movesSent": 39,
+    "movesConfirmed": 0,
+    "failures": []
+  }
+}

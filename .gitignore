@@ -426,3 +426,6 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# Local demo database. Reproducible benchmark summaries are kept in benchmarks/.
+/data/

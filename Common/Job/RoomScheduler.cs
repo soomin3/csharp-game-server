@@ -24,6 +24,7 @@ namespace Common.Job
 
         public int BatchSize { get; }
         public int WorkerCount => _workers.Length;
+        public int PendingJobCount { get { lock (_gate) { return _pendingJobs; } } }
 
         internal void JobQueued()
         {

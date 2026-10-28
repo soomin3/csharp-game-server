@@ -3,6 +3,7 @@
   <Project Path="DummyClient/DummyClient.csproj" />
   <Project Path="Game.Tests/Game.Tests.csproj" />
   <Project Path="Game/Game.csproj" />
+  <Project Path="LoadClient/LoadClient.csproj" />
   <Project Path="Login/Login.csproj" />
   <Project Path="PacketGenerator/PacketGenerator.csproj" />
 </Solution>

@@ -8,6 +8,10 @@ namespace Common.Job
         private readonly object _executionGate = new object();
         private readonly RoomScheduler? _scheduler;
         private int _scheduled;
+        private long _failedJobs;
+
+        public long FailedJobCount => Interlocked.Read(ref _failedJobs);
+        protected int SchedulerPendingJobs => _scheduler?.PendingJobCount ?? 0;
 
         public JobSerializer(RoomScheduler? scheduler = null)
         {
@@ -91,6 +95,7 @@ namespace Common.Job
             }
             catch (Exception e)
             {
+                Interlocked.Increment(ref _failedJobs);
                 Console.WriteLine($"[JobSerializer] 일감 실행 중 예외: {e}");
             }
             finally

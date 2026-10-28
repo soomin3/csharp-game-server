@@ -36,6 +36,8 @@ static async Task<int> RunServerAsync(ServerOptions options)
     await store.DrainAsync();
     await using RoomScheduler scheduler = new RoomScheduler(options.Workers);
     RoomManager manager = new RoomManager(scheduler, options.Rooms, store);
+    TickMetrics metrics = new TickMetrics();
+    foreach (GameRoom room in manager.Rooms) room.Metrics = metrics;
     GameHandler handler = new GameHandler(manager, tokens);
     SessionOptions sessionOptions = new SessionOptions { MaxPendingPackets = options.SendPackets, MaxPendingBytes = options.SendBytes };
     TServer server = new TServer(options.Port, client => new GameSession(client, handler, sessionOptions));
@@ -71,6 +73,39 @@ static async Task<int> RunServerAsync(ServerOptions options)
         await CleanupAsync("워커 종료", () => scheduler.CompleteAsync());
         await CleanupAsync("DB 종료", () => store.DisposeAsync().AsTask());
         if (server.SessionFailureCount != 0) failures++;
+        long jobErrors = manager.Rooms.Sum(room => room.FailedJobCount);
+        if (jobErrors != 0) failures++;
+        if (options.MetricsPath != null)
+        {
+            await CleanupAsync("측정 결과 기록", async () =>
+            {
+                var report = new
+                {
+                    capturedUtc = DateTimeOffset.UtcNow,
+                    metrics = metrics.Snapshot(),
+                    traffic = new { packetsSent = TSession.TotalPacketsSent, bytesSent = TSession.TotalBytesSent },
+                    activeSessions = server.ActiveSessionCount,
+                    pendingJobs = scheduler.PendingJobCount,
+                    pendingPersistence = manager.PendingPersistenceCount,
+                    reservedNames = manager.ReservedNameCount,
+                    roomPlayers = manager.Rooms.Sum(room => room.SessionCount),
+                    sessionErrors = server.SessionFailureCount, jobErrors, shutdownErrors = failures,
+                    environment = new
+                    {
+                        framework = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
+                        os = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
+                        processorCount = Environment.ProcessorCount,
+                        assemblyMvid = typeof(GameRoom).Module.ModuleVersionId.ToString()
+                    }
+                };
+                Directory.CreateDirectory(Path.GetDirectoryName(options.MetricsPath)!);
+                string json = System.Text.Json.JsonSerializer.Serialize(report, new System.Text.Json.JsonSerializerOptions
+                {
+                    WriteIndented = true, PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+                });
+                await File.WriteAllTextAsync(options.MetricsPath, json);
+            });
+        }
         Console.WriteLine($"[Game] 종료 완료: 저장·일감 정리, 남은 접속 {server.ActiveSessionCount}개, 오류 {failures}개");
     }
     return failures == 0 ? 0 : 1;

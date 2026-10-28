@@ -22,6 +22,7 @@ namespace Game.Room
             new Dictionary<(int X, int Y), HashSet<Player>>();
 
         public int SessionCount => _players.Count;
+        public TickMetrics? Metrics { get; set; }
         public int RoomId { get; }
         internal Action<GameRoom, Player>? PlayerRemoved { get; set; }
 
@@ -46,6 +47,20 @@ namespace Game.Room
         }
 
         public void Tick()
+        {
+            TickMetrics? metrics = Metrics;
+            if (metrics == null) { TickCore(); return; }
+            long start = System.Diagnostics.Stopwatch.GetTimestamp();
+            long utc = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            try { TickCore(); }
+            finally
+            {
+                metrics.Record(RoomId, utc, System.Diagnostics.Stopwatch.GetElapsedTime(start).TotalMilliseconds,
+                    SessionCount, SchedulerPendingJobs);
+            }
+        }
+
+        private void TickCore()
         {
             Dictionary<Player, byte[]> movePackets = new Dictionary<Player, byte[]>();
             foreach (Player player in _players.Values)

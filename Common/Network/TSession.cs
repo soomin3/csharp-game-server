@@ -12,6 +12,11 @@ namespace Common.Network
         private int _recvSize;
         private int _disconnected;
         private int _started;
+        private static long _packetsSent;
+        private static long _bytesSent;
+
+        public static long TotalPacketsSent => Interlocked.Read(ref _packetsSent);
+        public static long TotalBytesSent => Interlocked.Read(ref _bytesSent);
 
         public bool IsDisconnected => Volatile.Read(ref _disconnected) != 0;
         public int PendingSendPackets => _outgoing.PendingPackets;
@@ -132,6 +137,8 @@ namespace Common.Network
                     using (packet)
                     {
                         await _stream.WriteAsync(packet.Data, cancellationToken);
+                        Interlocked.Increment(ref _packetsSent);
+                        Interlocked.Add(ref _bytesSent, packet.Data.Length);
                     }
                 }
             }

@@ -1,12 +1,12 @@
 namespace Game.Configuration;
 
 public sealed record ServerOptions(int Port, int Workers, int Rooms, string DataPath, string LogPath,
-    int ShutdownAfterSeconds, int SendPackets, int SendBytes, bool Quiet)
+    int ShutdownAfterSeconds, int SendPackets, int SendBytes, bool Quiet, string? MetricsPath)
 {
     public static ServerOptions Parse(string[] args)
     {
         Dictionary<string, string> values = new Dictionary<string, string>(StringComparer.Ordinal);
-        string[] allowed = { "port", "workers", "rooms", "data", "log", "shutdown-after", "send-packets", "send-bytes" };
+        string[] allowed = { "port", "workers", "rooms", "data", "log", "shutdown-after", "send-packets", "send-bytes", "metrics" };
         bool quiet = false;
         for (int index = 0; index < args.Length; index++)
         {
@@ -28,8 +28,11 @@ public sealed record ServerOptions(int Port, int Workers, int Rooms, string Data
         string data = Path.GetFullPath(values.GetValueOrDefault("data", Path.Combine(AppContext.BaseDirectory, "data", "players.db")));
         string log = Path.GetFullPath(values.GetValueOrDefault("log", Path.Combine(AppContext.BaseDirectory, "logs", $"game-{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.log")));
         if (string.Equals(data, log, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException("--data and --log must be different files.");
+        string? metrics = values.TryGetValue("metrics", out string? metricPath) ? Path.GetFullPath(metricPath) : null;
+        if (metrics != null && (string.Equals(metrics, data, StringComparison.OrdinalIgnoreCase) || string.Equals(metrics, log, StringComparison.OrdinalIgnoreCase)))
+            throw new ArgumentException("--metrics must be different from --data and --log.");
         return new ServerOptions(Number("port", 7777, 1, 65535), Number("workers", 2, 1, 64), Number("rooms", 3, 1, 100),
             data, log, Number("shutdown-after", 0, 0, 86400), Number("send-packets", 1024, 1, 65536),
-            Number("send-bytes", 1024 * 1024, 64, 64 * 1024 * 1024), quiet);
+            Number("send-bytes", 1024 * 1024, 64, 64 * 1024 * 1024), quiet, metrics);
     }
 }
