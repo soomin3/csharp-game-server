@@ -4,6 +4,22 @@
 
 다시 이어서 할 때는 이 문서를 먼저 읽고, **"3. 지금 상태"**가 실제 코드와 맞는지 확인한 다음 시작한다.
 
+## 지원 목표와 일정
+
+**목표: 넥슨코리아·데브캣 지원용 게임 서버 포트폴리오를 만든다.** 직접 구현한 기능과 설계 선택의 이유, 테스트·실행 결과를 설명할 수 있는 것을 목표로 한다.
+
+| 지원 대상 | 지원 마감 (한국 시간) | 확인 근거 |
+|---|---|---|
+| 넥슨코리아 | **2026-10-28** (마감 시각 미확인) | 사용자가 2026-10-28에 알려준 일정 |
+| 데브캣 | 미확인 | 지원 대상만 정해진 상태 |
+
+**2026-10-28에는 넥슨코리아 지원을 위한 제출 준비를 우선한다.**
+
+- 현재 구현한 TCP 통신, 패킷 경계 처리, 로그인·채팅·이동, 일감 줄을 이용한 순차 처리와 테스트를 포트폴리오에 설명한다.
+- 제출 전에 README에 프로젝트 목적, 실행 방법, 구조, 구현 범위, 테스트 결과, 알려진 한계를 정리한다. 제출할 저장소 링크가 열리는지도 확인한다.
+- 구현 완료 표시는 원본에 적용하고 검증한 범위만 쓴다. **2026-10-28 기준 1~11단계를 원본에 적용하고 검증했다.**
+- 12~21단계는 장기 개발 계획으로 유지한다. 지원 마감까지의 제출 범위는 실제로 완성하고 확인한 내용을 기준으로 정한다.
+
 ---
 
 ## 1. 문서 작성 규칙
@@ -33,16 +49,12 @@
 
 ## 2. 진행 규칙 (한 단계를 진행하는 방식)
 
-- 코드는 사용자가 직접 타이핑한다. 안내만 하고 MyServer 코드를 직접 고치지 않는다.
-- 안내하기 전에 MyServer 복사본에서 빌드·테스트·실행까지 해보고, 실제로 나온 출력을 함께 알려준다.
-  - 복사본 서버는 포트 **17777**로 바꿔서 돌린다. 사용자가 MyServer 서버(7777)를 띄워두고 있을 수 있기 때문이다.
-- 모든 지시에는 "왜 하는지"를 같이 적는다. 가능하면 C++에서 대응하는 개념도 함께 적는다.
-- 이미 있는 파일을 고칠 때는 **조각**으로 준다.
-  - 맨 위에 적용 순서표를 둔다.
-  - 순서는 **정의되는 쪽 → 그걸 쓰는 쪽**이다.
-  - 각 조각은 "파일 + 위치 → 코드 → 설명" 순서다.
-  - 중간중간 "여기까지 하고 빌드" 확인 지점을 둔다.
-- 새 도구나 타입을 들일 때는 "이미 배운 것으로는 왜 안 되는지"를 먼저 설명한다. 이유가 약하면 이미 쓰는 것으로 통일한다.
+- **2026-10-28 사용자 요청에 따라 에이전트가 코드를 직접 구현하고, 단계별로 검증한 뒤 로컬 커밋한다.**
+- 시작 전에 현재 코드와 작업 중인 변경을 읽고, 이미 진행한 작업을 이어서 완성한다.
+- 한 단계의 순서는 **구현 → 빌드·테스트 → 실행 확인 → ROADMAP 갱신 → 커밋**이다. 커밋에는 해당 단계의 코드·테스트·문서만 넣는다.
+- 빌드·테스트는 실제 작업한 원본에서 확인한다. 서버 실행은 복사본의 포트를 **17777**로 바꿔 검증하고, 확인 뒤 검증 서버를 종료한다. 사용 중일 수 있는 원본 서버(7777)와 충돌하지 않게 하기 위해서다.
+- 완료 보고에는 단계, 커밋, 검증 결과를 간단히 적는다. 코드 설명이 필요하면 변경 이유와 C++의 대응 개념을 함께 설명한다.
+- 새 도구나 타입은 기존 방식과 비교해 도입 이유가 있을 때만 추가한다.
 
 ---
 
@@ -50,10 +62,12 @@
 
 | 항목 | 상태 (2026-10-28 확인) |
 |---|---|
-| 완료 | **1~10단계** |
+| 완료 | **1~11단계** |
 | 빌드 | 경고 0개, 오류 0개 |
-| 테스트 | `dotnet test` 9개 통과 (GameHandlerTests 6, PacketTests 2, ConcurrencyTests 1) |
-| 다음 할 일 | **11단계(틱) 적용.** 안내는 받았고 코드는 아직 안 들어감 → [부록 A](#부록-a-11단계-틱-적용-내용) |
+| 테스트 | `dotnet test --no-build` 10개 통과 (GameHandlerTests 7, PacketTests 2, ConcurrencyTests 1) |
+| 실행 검증 | 복사본 서버(17777)에 클라 2명 접속. 이동 3개를 한 번에 보내면 둘 다 마지막 위치 `(3, 3)` 알림 1개 수신. 이어진 200ms 동안 추가 알림 0개. 검증 서버 종료 확인. |
+| 지원 준비 우선순위 | **2026-10-28 넥슨코리아 지원용 제출 자료 정리.** 현재 구현 범위, 실행 방법, 검증 근거와 한계를 설명한다. |
+| 다음 개발 작업 | **12단계: 입장·퇴장 알림** |
 
 ---
 
@@ -69,9 +83,11 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
                        ▼
                      GameHandler.ResXxx: 방에 일감을 넣기만 함 (Push)
                        ▼
-                     GameRoom 일감 줄 (Channel) ── room.RunAsync()가 한 번에 하나씩 꺼내 실행
+                     GameRoom 일감 줄 (Channel) ◄── 50ms 간격의 타이머가 Push(Tick)
+                       │ room.RunAsync()가 한 번에 하나씩 꺼내 실행
                        ▼
-                     GameRoom.HandleXxx: 게임 상태(명단 등)는 여기서만 만짐
+                     GameRoom.HandleXxx / Tick: 게임 상태는 이 처리 흐름에서만 만짐
+                       │ HandleMove는 위치 기록, Tick은 움직인 사람의 마지막 위치 알림
                        ▼
                      session.SendPacket ──► TSession 보내기 줄 (Channel) ──► 보내기 루프 ──TCP──► 클라
 ```
@@ -90,10 +106,11 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 | `Common/Network/TSession.cs` | 접속 하나를 맡음: 받기 루프 + 보내기 루프 (abstract) |
 | `Common/Job/JobSerializer.cs` | 일감 줄 (Channel): Push / Flush / RunAsync |
 | `Common/Network/EchoPacket.cs` | 쓰지 않음 (2단계 class/struct 실험용) |
-| `Game/Program.cs` | 방·핸들러·서버를 만들어 조립 |
+| `Game/Program.cs` | 방·핸들러·서버를 조립하고 일감 처리·틱 루프 시작 |
 | `Game/Network/GameSession.cs` | TSession의 자식, 패킷 분배. **`IGameSession` 인터페이스도 이 파일 안에 있음** |
 | `Game/Network/GameHandler.cs` | 패킷 종류별 함수. 방에 Push만 함 |
-| `Game/Room/GameRoom.cs` | 게임 상태와 처리 (일감 줄을 통해서만 실행) |
+| `Game/Room/Player.cs` | 세션에 대응하는 플레이어의 위치와 이동 여부 저장 |
+| `Game/Room/GameRoom.cs` | Dictionary 명단, 이동 기록, 틱에서 이동 알림 (일감 줄을 통해서만 실행) |
 | `DummyClient/Program.cs` | 이름 입력 후 채팅, `/move x y`로 이동 |
 | `Game.Tests/FakeGameSession.cs` | 소켓 없는 가짜 세션 (보낸 패킷을 기록) |
 | `Login/Program.cs` | 템플릿 그대로 (아직 안 씀) |
@@ -103,6 +120,8 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 ## 5. 개발 단계 전체
 
 **끝 지점:** 접속 → 로그인 → 입장 → 이동·채팅 → 퇴장까지 전체 흐름이 돌아가고, 자동 더미 클라 수백 명으로 부하를 걸었을 때 틱 처리가 50ms 안에 끝나는 것을 확인한 상태.
+
+이 끝 지점은 포트폴리오의 장기 완성 목표다. 지원 시점의 구현 완료 범위는 "3. 지금 상태"와 실제 코드를 기준으로 설명한다.
 
 단계 순서와 범위는 제안이다. 바꾸면 "변경 기록"에 남긴다.
 
@@ -123,12 +142,9 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 
 ### 묶음 B. 게임 서버의 기본 흐름
 
-#### 11. 틱 (일정 간격으로 도는 게임 루프)
-- **목표:** 방이 50ms마다 틱을 돈다. 이동 요청은 위치를 기록만 하고, 틱에서 움직인 사람의 마지막 위치를 한 번만 알린다.
-- **왜:** 이동 요청을 받는 족족 모두에게 보내면 패킷이 폭발한다. 다른 사람에게 필요한 건 마지막 위치 하나뿐이다. 회복·AI처럼 시간이 흐르면서 일어나는 일도 일정한 박동이 필요하다.
-- **범위:** 넣을 것은 `Player` 클래스(게임 속 존재), `Dictionary`로 된 명단, 틱 루프(`PeriodicTimer`가 `Push(Tick)`), `HandleMove`의 "기록만"으로의 변경. 뺄 것은 입장 알림과 시야(12, 14).
-- **완료 기준:** 테스트 10개 통과. 클라에서 `/move`를 연달아 빠르게 보내면 다른 사람 화면에는 마지막 위치만 찍힌다.
-- **상태:** 안내 완료, 적용 전 → [부록 A](#부록-a-11단계-틱-적용-내용)
+| 완료한 단계 | 만든 것 | 처음 배운 C# |
+|---|---|---|
+| 11. 틱 | Player·Dictionary 명단, 50ms 간격의 틱 일감, 이동을 모아 마지막 위치만 알림 | Dictionary, PeriodicTimer, using으로 자원 정리 |
 
 #### 12. 입장·퇴장 알림
 - **목표:** 새로 들어온 사람은 이미 있는 사람들의 위치를 받고, 나간 사람은 남은 사람들의 화면에서 사라진다.
@@ -245,180 +261,8 @@ cd E:/MyServer && dotnet run --project DummyClient
 
 ---
 
-## 부록 A. 11단계 (틱) 적용 내용
-
-MyServer 복사본에서 빌드 경고 0개·오류 0개, 테스트 10개 통과, 실제 실행까지 확인한 코드다. `GameHandler`, `GameSession`, `DummyClient`는 바뀌지 않는다.
-
-| 순서 | 파일 | 내용 | 확인 |
-|---|---|---|---|
-| ① | `Game/Room/Player.cs` | 신규 | 빌드 |
-| ② | `Game/Room/GameRoom.cs` | ②-1 ~ ②-5 (다 하고 나서 빌드) | 빌드 |
-| ③ | `Game/Program.cs` | 한 줄 추가 | 빌드 |
-| ④ | `Game.Tests/GameHandlerTests.cs` | 기존 이동 테스트 2개에 한 줄씩 + 새 테스트 1개 | `dotnet test` 10개 |
-
-### ① `Game/Room/Player.cs` (신규)
-
-```csharp
-using Game.Network;
-
-namespace Game.Room
-{
-    public class Player
-    {
-        public Player(IGameSession session)
-        {
-            Session = session;
-        }
-
-        public IGameSession Session { get; }
-        public float X { get; set; }
-        public float Y { get; set; }
-        public bool Moved { get; set; }
-    }
-}
-```
-
-세션은 **연결**(받기·보내기)이고, 플레이어는 **게임 속 존재**(위치)다. 게임 상태는 방이 쥐고 세션은 연결 일만 하게 나눈다. `Moved`는 "지난 틱 이후 움직였나" 표시다.
-
-### ② `Game/Room/GameRoom.cs`
-
-**②-1.** `MapSize` 줄 바로 아래에 추가
-```csharp
-private const int TickIntervalMs = 50;
-```
-
-**②-2.** 명단 필드와 `SessionCount` 두 줄 교체
-```csharp
-private readonly Dictionary<IGameSession, Player> _players = new Dictionary<IGameSession, Player>();
-public int SessionCount => _players.Count;
-```
-`Dictionary`는 C++ `std::unordered_map`이다. 세션으로 그 사람의 플레이어를 바로 찾을 수 있다.
-
-**②-3.** `SessionCount` 줄 바로 아래에 추가
-```csharp
-public async Task RunTickLoopAsync()
-{
-    using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMilliseconds(TickIntervalMs));
-    while (await timer.WaitForNextTickAsync())
-    {
-        Push(Tick);
-    }
-}
-
-public void Tick()
-{
-    foreach (Player player in _players.Values)
-    {
-        if (!player.Moved)
-        {
-            continue;
-        }
-
-        player.Moved = false;
-        Console.WriteLine($"[GameRoom] 틱: {player.Session.Name} 위치 알림 → ({player.X}, {player.Y})");
-        byte[] packet = new MoveNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
-        foreach (IGameSession other in _players.Keys)
-        {
-            other.SendPacket(packet);
-        }
-    }
-}
-```
-- `PeriodicTimer`: 정해진 간격마다 `await`로 깨워주는 타이머다.
-- `using`: 범위를 벗어나면 자동으로 정리한다. C++ RAII(소멸자에서 정리)와 같다.
-- **`Tick()`을 바로 부르지 않고 `Push(Tick)`으로 줄에 넣는 게 핵심이다.** 타이머 루프는 일감 처리와 다른 흐름에서 돈다. 여기서 바로 부르면 Tick이 명단을 도는 동안 로그인이 명단에 추가하는 일이 동시에 일어날 수 있다(9단계 문제). 일감 하나로 넣으면 "한 번에 하나씩"이 지켜진다.
-
-**②-4.** `_sessions`가 나오는 나머지 줄 바꾸기
-
-| 함수 | 바꾸기 전 | 바꾼 후 |
-|---|---|---|
-| `HandleLogin` | `_sessions.Add(session);` | `_players[session] = new Player(session);` |
-| `HandleChat` | `foreach (IGameSession other in _sessions)` | `foreach (IGameSession other in _players.Keys)` |
-| `HandleLeave` | `_sessions.Remove(session);` | `_players.Remove(session);` |
-| 로그 3곳 | `_sessions.Count` | `_players.Count` |
-
-`_players[session] = ...`은 C++ `std::map`의 `operator[]`처럼, 없으면 넣고 있으면 덮어쓴다.
-
-**②-5.** `HandleMove` 통째로 교체
-```csharp
-public void HandleMove(IGameSession session, MoveReq req)
-{
-    if (!IsInMap(req.X) || !IsInMap(req.Y))
-    {
-        Console.WriteLine($"[GameRoom] 이동 거부: {session.Name} → ({req.X}, {req.Y}) 맵 밖");
-        return;
-    }
-
-    if (!_players.TryGetValue(session, out Player? player))
-    {
-        return;
-    }
-
-    player.X = req.X;
-    player.Y = req.Y;
-    player.Moved = true;
-    Console.WriteLine($"[GameRoom] 이동 기록: {session.Name} → ({req.X}, {req.Y})");
-}
-```
-이동 요청이 와도 바로 보내지 않는다. 기록하고 표시만 켜두면, 다음 틱이 보낸다.
-
-빌드했을 때 `CS0103: '_sessions' 이름이 현재 컨텍스트에 없습니다`가 나오면 ②-4에서 못 바꾼 줄이 남은 것이다.
-
-### ③ `Game/Program.cs`
-
-`_ = room.RunAsync();` 바로 아래에 추가
-```csharp
-_ = room.RunTickLoopAsync();
-```
-이 줄을 빠뜨리면 이동은 기록만 되고 알림이 나가지 않는다. 채팅은 그대로 된다.
-
-### ④ `Game.Tests/GameHandlerTests.cs`
-
-**④-1.** `이동하면_모두에게_MoveNtf를_보낸다`와 `맵_밖으로는_이동할_수_없다` 두 테스트에서 `room.Flush();` 바로 아래에 추가
-```csharp
-room.Tick();
-```
-이제 알림은 틱이 보낸다. 첫 번째 테스트는 이 줄이 없으면 실패한다. 두 번째 테스트는 이 줄이 있어야 "틱까지 돌았는데도 안 보냈다"를 확인하는 의미 있는 테스트가 된다.
-
-**④-2.** `IdOf` 바로 위에 추가
-```csharp
-[Fact]
-public void 한_틱_안에_여러_번_이동하면_마지막_위치만_한_번_보낸다()
-{
-    GameRoom room = new GameRoom();
-    GameHandler handler = new GameHandler(room);
-    FakeGameSession kim = new FakeGameSession();
-    handler.ResLogin(kim, "Kim");
-
-    handler.ResMove(kim, new MoveReq { X = 1f, Y = 1f });
-    handler.ResMove(kim, new MoveReq { X = 2f, Y = 2f });
-    handler.ResMove(kim, new MoveReq { X = 3f, Y = 3f });
-    room.Flush();
-    Assert.Single(kim.SentPackets);
-
-    room.Tick();
-    Assert.Equal(2, kim.SentPackets.Count);
-    MoveNtf? ntf = MoveNtf.ToValue(kim.SentPackets[1], PacketHeader.Size, kim.SentPackets[1].Length - PacketHeader.Size);
-    Assert.NotNull(ntf);
-    Assert.Equal(3f, ntf.X);
-    Assert.Equal(3f, ntf.Y);
-
-    room.Tick();
-    Assert.Equal(2, kim.SentPackets.Count);
-}
-```
-이 테스트는 세 구간을 확인한다. `Flush` 뒤에는 기록만 되어 있어서 환영 패킷 1개뿐이다. 첫 틱 뒤에는 마지막 위치 하나만 나간다. 두 번째 틱에서는 움직임이 없었으니 아무것도 나가지 않는다.
-
-**실행 확인 (복사본에서 실제로 나온 서버 로그):** `/move 1 1`, `/move 2 2`, `/move 3 3`을 연달아 보냈을 때
-```
-[GameRoom] 이동 기록: Kim → (1, 1)
-[GameRoom] 이동 기록: Kim → (2, 2)
-[GameRoom] 이동 기록: Kim → (3, 3)
-[GameRoom] 틱: Kim 위치 알림 → (3, 3)
-```
-
----
-
 ## 변경 기록
 
 - 2026-10-28: 처음 작성. 1~10단계 완료 상태와 11~21단계 계획, 문서 작성 규칙 정리.
+- 2026-10-28: 넥슨코리아·데브캣 지원용 포트폴리오라는 목표와 사용자 제공 넥슨코리아 지원 마감일(2026-10-28)을 추가. 마감에 맞춘 제출 준비를 우선하고, 현재 구현 범위와 장기 개발 계획을 구분.
+- 2026-10-28: 사용자 요청으로 직접 입력 안내에서 에이전트의 단계별 구현·검증·커밋 방식으로 변경. 11단계 완료: 원본 빌드 경고·오류 0개, 테스트 10개 통과, 복사본 서버(17777)에서 클라 2명의 마지막 위치 1회 수신과 추가 알림 0개 확인. 적용을 마친 부록 A 삭제.

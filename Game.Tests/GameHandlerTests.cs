@@ -90,6 +90,7 @@ namespace Game.Tests
 
             handler.ResMove(kim, new MoveReq { X = 3.5f, Y = 7f });
             room.Flush();
+            room.Tick();
 
             byte[] packet = lee.SentPackets[1];
             Assert.Equal(PacketId.MoveNtf, IdOf(packet));
@@ -110,8 +111,47 @@ namespace Game.Tests
 
             handler.ResMove(kim, new MoveReq { X = 500f, Y = 7f });
             room.Flush();
+            room.Tick();
 
             Assert.Single(kim.SentPackets);
+        }
+
+        [Fact]
+        public void 한_틱_안에_여러_번_이동하면_마지막_위치만_한_번_보낸다()
+        {
+            GameRoom room = new GameRoom();
+            GameHandler handler = new GameHandler(room);
+            FakeGameSession kim = new FakeGameSession();
+            FakeGameSession lee = new FakeGameSession();
+            handler.ResLogin(kim, "Kim");
+            handler.ResLogin(lee, "Lee");
+
+            handler.ResMove(kim, new MoveReq { X = 1f, Y = 1f });
+            handler.ResMove(kim, new MoveReq { X = 2f, Y = 2f });
+            handler.ResMove(kim, new MoveReq { X = 3f, Y = 3f });
+            room.Flush();
+
+            Assert.Single(kim.SentPackets);
+            Assert.Single(lee.SentPackets);
+
+            room.Tick();
+
+            foreach (FakeGameSession session in new[] { kim, lee })
+            {
+                Assert.Equal(2, session.SentPackets.Count);
+                byte[] packet = session.SentPackets[1];
+                Assert.Equal(PacketId.MoveNtf, IdOf(packet));
+                MoveNtf? ntf = MoveNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+                Assert.NotNull(ntf);
+                Assert.Equal("Kim", ntf.Name);
+                Assert.Equal(3f, ntf.X);
+                Assert.Equal(3f, ntf.Y);
+            }
+
+            room.Tick();
+
+            Assert.Equal(2, kim.SentPackets.Count);
+            Assert.Equal(2, lee.SentPackets.Count);
         }
 
         private static PacketId IdOf(byte[] packet) => (PacketId)BitConverter.ToUInt16(packet, PacketHeader.LengthSize);
