@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Common/Common.csproj" />
+  <Project Path="DummyClient/DummyClient.csproj" />
+  <Project Path="Game.Tests/Game.Tests.csproj" />
+  <Project Path="Game/Game.csproj" />
+  <Project Path="Login/Login.csproj" />
+</Solution>
