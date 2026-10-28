@@ -54,6 +54,7 @@ namespace Game.Tests
         [InlineData(PacketId.MoveNtf)]
         [InlineData(PacketId.PlayerEnterNtf)]
         [InlineData(PacketId.PlayerLeaveNtf)]
+        [InlineData(PacketId.ChangeRoomNtf)]
         [InlineData((PacketId)65000)]
         public void 허용하지_않은_패킷은_핸들러_호출_없이_연결을_끊는다(PacketId id)
         {
@@ -139,6 +140,34 @@ namespace Game.Tests
             Assert.Contains("EchoReq", session.DisconnectReason);
         }
 
+        [Fact]
+        public void 방_이동_요청을_맞는_타입과_번호로_전달한다()
+        {
+            byte[] bytes = new ChangeRoomReq { RoomId = 3 }.ToPacket();
+            SpyHandler handler = new SpyHandler();
+            FakeGameSession session = new FakeGameSession();
+
+            Assert.True(new PacketDispatcher(handler).Dispatch(session, PacketId.ChangeRoomReq, bytes, PacketHeader.Size, bytes.Length - PacketHeader.Size));
+
+            Assert.Same(session, handler.Session);
+            Assert.Equal(3, Assert.IsType<ChangeRoomReq>(handler.Packet).RoomId);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(3)]
+        [InlineData(5)]
+        public void 방_이동_본문은_정확히_정수_한_개여야_한다(int length)
+        {
+            SpyHandler handler = new SpyHandler();
+            FakeGameSession session = new FakeGameSession();
+
+            Assert.False(new PacketDispatcher(handler).Dispatch(session, PacketId.ChangeRoomReq, new byte[length], 0, length));
+
+            Assert.True(session.IsDisconnected);
+            Assert.Null(handler.Packet);
+        }
+
         private sealed class EmptyHandler : IPacketHandler
         {
         }
@@ -151,6 +180,7 @@ namespace Game.Tests
             public void ResEcho(IGameSession session, EchoReq packet) => Record(session, packet);
             public void ResChat(IGameSession session, ChatReq packet) => Record(session, packet);
             public void ResMove(IGameSession session, MoveReq packet) => Record(session, packet);
+            public void ResChangeRoom(IGameSession session, ChangeRoomReq packet) => Record(session, packet);
 
             private void Record(IGameSession session, object packet)
             {

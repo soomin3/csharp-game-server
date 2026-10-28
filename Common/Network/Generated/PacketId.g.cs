@@ -13,5 +13,7 @@ namespace Common.Network
         MoveNtf = 5,
         PlayerEnterNtf = 6,
         PlayerLeaveNtf = 7,
+        ChangeRoomReq = 8,
+        ChangeRoomNtf = 9,
     }
 }

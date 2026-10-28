@@ -2,7 +2,13 @@
 using Common.Network;
 
 TcpClient client = new TcpClient();
-await client.ConnectAsync("127.0.0.1", 7777);
+int portIndex = Array.IndexOf(args, "--port");
+int port = 7777;
+if (portIndex >= 0 && (portIndex + 1 >= args.Length || !int.TryParse(args[portIndex + 1], out port) || port < 1 || port > 65535))
+{
+    throw new ArgumentException("--port 뒤에 1~65535 포트 번호가 필요합니다.");
+}
+await client.ConnectAsync("127.0.0.1", port);
 Console.WriteLine("[DummyClient] 접속 성공");
 
 NetworkStream stream = client.GetStream();
@@ -21,13 +27,28 @@ if (string.IsNullOrEmpty(name))
 }
 await stream.WriteAsync(new LoginReq { Name = name }.ToPacket());
 
-Console.WriteLine("채팅을 입력하세요. 이동은 /move x y (예: /move 3.5 7). 빈 줄을 입력하면 종료합니다.");
+Console.WriteLine("채팅을 입력하세요. 이동은 /move x y, 방 이동은 /room 번호. 빈 줄을 입력하면 종료합니다.");
 while (true)
 {
     string? line = Console.ReadLine();
     if (string.IsNullOrEmpty(line))
     {
         break;
+    }
+
+    if (line.StartsWith("/room "))
+    {
+        string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 2 && int.TryParse(parts[1], out int roomId) && roomId > 0)
+        {
+            await stream.WriteAsync(new ChangeRoomReq { RoomId = roomId }.ToPacket());
+        }
+        else
+        {
+            Console.WriteLine("사용법: /room 번호   (예: /room 2)");
+        }
+
+        continue;
     }
 
     if (line.StartsWith("/move "))
@@ -122,6 +143,16 @@ void OnPacket(PacketId id, byte[] buffer, int offset, int length)
             if (ntf != null)
             {
                 Console.WriteLine($"[퇴장] {ntf.Name}");
+            }
+
+            break;
+        }
+        case PacketId.ChangeRoomNtf:
+        {
+            ChangeRoomNtf? ntf = ChangeRoomNtf.ToValue(buffer, offset, length);
+            if (ntf != null)
+            {
+                Console.WriteLine($"[방] {ntf.RoomId} → ({ntf.X}, {ntf.Y})");
             }
 
             break;

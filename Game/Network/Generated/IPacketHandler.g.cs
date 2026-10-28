@@ -26,5 +26,10 @@ namespace Game.Network
             session.Disconnect("Unhandled packet: MoveReq");
         }
 
+        void ResChangeRoom(IGameSession session, ChangeRoomReq packet)
+        {
+            session.Disconnect("Unhandled packet: ChangeRoomReq");
+        }
+
     }
 }

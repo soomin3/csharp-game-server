@@ -16,6 +16,9 @@ namespace Game.Tests
             yield return Case("server MoveNtf", new MoveNtf { Name = "Kim", X = 1, Y = 2 }.ToPacket());
             yield return Case("server PlayerEnterNtf", new PlayerEnterNtf { Name = "Kim", X = 1, Y = 2 }.ToPacket());
             yield return Case("server PlayerLeaveNtf", new PlayerLeaveNtf { Name = "Kim" }.ToPacket());
+            yield return Case("server ChangeRoomNtf", new ChangeRoomNtf { RoomId = 2, X = 1, Y = 2 }.ToPacket());
+            yield return Case("short ChangeRoomReq", Build(PacketId.ChangeRoomReq, new byte[3]));
+            yield return Case("long ChangeRoomReq", Build(PacketId.ChangeRoomReq, new byte[5]));
             yield return Case("invalid UTF8 Login", Build(PacketId.Login, StringBody(new byte[] { 0xc3, 0x28 })));
             yield return Case("invalid UTF8 Chat", Build(PacketId.Chat, StringBody(new byte[] { 0xc3, 0x28 })));
             yield return Case("invalid UTF8 Echo", Build(PacketId.Echo, StringBody(new byte[] { 0xc3, 0x28 })));

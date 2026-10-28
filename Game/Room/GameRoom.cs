@@ -1,4 +1,4 @@
-﻿using Common.Job;
+using Common.Job;
 using Common.Network;
 using Game.Network;
 using System.Text;
@@ -21,13 +21,25 @@ namespace Game.Room
             new Dictionary<(int X, int Y), HashSet<Player>>();
 
         public int SessionCount => _players.Count;
+        public int RoomId { get; }
 
-        public async Task RunTickLoopAsync()
+        public GameRoom(int roomId = 1, RoomScheduler? scheduler = null) : base(scheduler)
+        {
+            RoomId = roomId;
+        }
+
+        public async Task RunTickLoopAsync(CancellationToken cancellationToken = default)
         {
             using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMilliseconds(TickIntervalMs));
-            while (await timer.WaitForNextTickAsync())
+            try
             {
-                Push(Tick);
+                while (await timer.WaitForNextTickAsync(cancellationToken))
+                {
+                    Push(Tick);
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
             }
         }
 
@@ -111,7 +123,7 @@ namespace Game.Room
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(name) || name != name.Trim() || !IsValidText(name, MaxNameBytes))
+            if (!IsValidName(name))
             {
                 Reject(session, "잘못된 이름 (UTF-8 1~64바이트, 앞뒤 공백과 제어문자 금지)");
                 return;
@@ -133,13 +145,17 @@ namespace Game.Room
             AddToCell(player);
             Console.WriteLine($"[GameRoom] 로그인: {name} (접속 {_players.Count}명)");
             session.SendPacket(new LoginRes { Message = $"환영합니다, {name}님" }.ToPacket());
+            AnnounceEntry(player);
+        }
 
+        private void AnnounceEntry(Player player)
+        {
             byte[] enterPacket = EnterPacket(player);
             foreach (Player other in FindNearbyPlayers(player))
             {
                 player.KnownPlayers.Add(other);
                 other.KnownPlayers.Add(player);
-                session.SendPacket(EnterPacket(other));
+                player.Session.SendPacket(EnterPacket(other));
                 other.Session.SendPacket(enterPacket);
             }
         }
@@ -227,10 +243,16 @@ namespace Game.Room
         {
             session.State = GameSessionState.Disconnected;
             session.Disconnect();
+            DetachPlayer(session, false);
+        }
 
+        internal Player? DetachForTransfer(IGameSession session) => DetachPlayer(session, true);
+
+        private Player? DetachPlayer(IGameSession session, bool clearOwnView)
+        {
             if (!_players.Remove(session, out Player? player))
             {
-                return;
+                return null;
             }
 
             RemoveFromCell(player, CellOf(player));
@@ -242,8 +264,54 @@ namespace Game.Room
                 {
                     other.Session.SendPacket(packet);
                 }
+
+                if (clearOwnView)
+                {
+                    session.SendPacket(new PlayerLeaveNtf { Name = other.Session.Name }.ToPacket());
+                }
             }
             player.KnownPlayers.Clear();
+            // 방 이동은 마지막 확정 위치를 보존하고 아직 틱에 적용하지 않은 이동은 버린다.
+            player.PendingX = player.X;
+            player.PendingY = player.Y;
+            player.Moved = false;
+            return player;
+        }
+
+        internal bool AttachTransferred(Player player)
+        {
+            if (HasDisconnected(player.Session) || player.Session.State != GameSessionState.LoggedIn ||
+                !_players.TryAdd(player.Session, player))
+            {
+                return false;
+            }
+
+            AddToCell(player);
+            player.Session.SendPacket(new ChangeRoomNtf { RoomId = RoomId, X = player.X, Y = player.Y }.ToPacket());
+            if (HasDisconnected(player.Session))
+            {
+                DetachPlayer(player.Session, false);
+                return false;
+            }
+            AnnounceEntry(player);
+            return true;
+        }
+
+        internal void NotifyCurrentRoom(IGameSession session)
+        {
+            if (RequireLogin(session))
+            {
+                Player player = _players[session];
+                session.SendPacket(new ChangeRoomNtf { RoomId = RoomId, X = player.X, Y = player.Y }.ToPacket());
+            }
+        }
+
+        internal void HandleChangeRoom(IGameSession session, int roomId)
+        {
+            if (RequireLogin(session) && roomId == RoomId)
+            {
+                NotifyCurrentRoom(session);
+            }
         }
 
         private static (int X, int Y) CellOf(Player player) =>
@@ -302,6 +370,9 @@ namespace Game.Room
             new PlayerEnterNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
 
         private static bool IsInMap(float value) => value >= 0 && value <= MapSize;
+
+        internal static bool IsValidName(string name) =>
+            !string.IsNullOrWhiteSpace(name) && name == name.Trim() && IsValidText(name, MaxNameBytes);
 
         private static bool HasDisconnected(IGameSession session) =>
             session.IsDisconnected || session.State == GameSessionState.Disconnected;

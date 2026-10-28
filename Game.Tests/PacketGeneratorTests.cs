@@ -26,6 +26,8 @@ namespace Game.Tests
             Assert.Equal(5, (int)PacketId.MoveNtf);
             Assert.Equal(6, (int)PacketId.PlayerEnterNtf);
             Assert.Equal(7, (int)PacketId.PlayerLeaveNtf);
+            Assert.Equal(8, (int)PacketId.ChangeRoomReq);
+            Assert.Equal(9, (int)PacketId.ChangeRoomNtf);
         }
 
         [Fact]

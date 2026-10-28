@@ -9,6 +9,8 @@
     { "name": "MoveReq", "id": 4, "direction": "clientToServer", "fields": [{ "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
     { "name": "MoveNtf", "id": 5, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }, { "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
     { "name": "PlayerEnterNtf", "id": 6, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }, { "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
-    { "name": "PlayerLeaveNtf", "id": 7, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }] }
+    { "name": "PlayerLeaveNtf", "id": 7, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }] },
+    { "name": "ChangeRoomReq", "id": 8, "direction": "clientToServer", "fields": [{ "name": "RoomId", "type": "int" }] },
+    { "name": "ChangeRoomNtf", "id": 9, "direction": "serverToClient", "fields": [{ "name": "RoomId", "type": "int" }, { "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] }
   ]
 }

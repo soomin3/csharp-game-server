@@ -19,14 +19,14 @@ dotnet test --no-build
 
 ```json
 {
-  "name": "ChangeRoomReq",
-  "id": 8,
+  "name": "ProbeReq",
+  "id": 10,
   "direction": "clientToServer",
-  "fields": [{ "name": "RoomId", "type": "int" }]
+  "fields": [{ "name": "Value", "type": "int" }]
 }
 ```
 
-이 항목을 `packets` 배열에 추가하고 생성기를 실행하면 번호·클래스·분배기·인터페이스가 함께 만들어진다. 요청 핸들러 이름은 기본적으로 `ChangeRoomReq`에서 `Req`를 뺀 뒤 `Res`를 붙인 `ResChangeRoom`이다. `handler`로 이름을 직접 지정할 수도 있다.
+이 항목을 `packets` 배열에 추가하고 생성기를 실행하면 번호·클래스·분배기·인터페이스가 함께 만들어진다. 요청 핸들러 이름은 기본적으로 `ProbeReq`에서 `Req`를 뺀 뒤 `Res`를 붙인 `ResProbe`이다. `handler`로 이름을 직접 지정할 수도 있다.
 
 `GameHandler`에 해당 메서드를 구현하면 처리가 연결된다. 아직 구현하지 않은 요청의 기본 동작은 연결 종료이므로, 새 정의를 추가한 상태에서도 빌드할 수 있다.
 

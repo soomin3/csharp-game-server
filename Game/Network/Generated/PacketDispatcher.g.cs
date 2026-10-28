@@ -67,6 +67,17 @@ namespace Game.Network
                     _handler.ResMove(session, packet);
                     return true;
                 }
+                case PacketId.ChangeRoomReq:
+                {
+                    ChangeRoomReq? packet = ChangeRoomReq.ToValue(buffer, offset, length);
+                    if (packet is null)
+                    {
+                        session.Disconnect("Malformed packet: ChangeRoomReq");
+                        return false;
+                    }
+                    _handler.ResChangeRoom(session, packet);
+                    return true;
+                }
                 default:
                     session.Disconnect($"Unknown packet ID: {(ushort)id}");
                     return false;

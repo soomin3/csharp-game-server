@@ -5,6 +5,30 @@ namespace Game.Tests
     public class PacketTests
     {
         [Fact]
+        public void ChangeRoomReq를_쓰고_읽으면_방_번호가_유지된다()
+        {
+            byte[] bytes = new ChangeRoomReq { RoomId = 3 }.ToPacket();
+            ChangeRoomReq? read = ChangeRoomReq.ToValue(bytes, PacketHeader.Size, bytes.Length - PacketHeader.Size);
+
+            Assert.NotNull(read);
+            Assert.Equal(3, read.RoomId);
+            Assert.Equal(PacketId.ChangeRoomReq, (PacketId)BitConverter.ToUInt16(bytes, PacketHeader.LengthSize));
+        }
+
+        [Fact]
+        public void ChangeRoomNtf를_쓰고_읽으면_방과_확정_위치가_유지된다()
+        {
+            byte[] bytes = new ChangeRoomNtf { RoomId = 2, X = 3.5f, Y = 7f }.ToPacket();
+            ChangeRoomNtf? read = ChangeRoomNtf.ToValue(bytes, PacketHeader.Size, bytes.Length - PacketHeader.Size);
+
+            Assert.NotNull(read);
+            Assert.Equal(2, read.RoomId);
+            Assert.Equal(3.5f, read.X);
+            Assert.Equal(7f, read.Y);
+            Assert.Equal(PacketId.ChangeRoomNtf, (PacketId)BitConverter.ToUInt16(bytes, PacketHeader.LengthSize));
+        }
+
+        [Fact]
         public void MoveNtf를_쓰고_읽으면_같은_값이_나온다()
         {
             MoveNtf original = new MoveNtf { Name = "Kim", X = 3.5f, Y = 7f };
