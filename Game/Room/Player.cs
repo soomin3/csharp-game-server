@@ -12,6 +12,9 @@ namespace Game.Room
         public IGameSession Session { get; }
         public float X { get; set; }
         public float Y { get; set; }
+        public float PendingX { get; set; }
+        public float PendingY { get; set; }
         public bool Moved { get; set; }
+        public HashSet<Player> KnownPlayers { get; } = new HashSet<Player>();
     }
 }

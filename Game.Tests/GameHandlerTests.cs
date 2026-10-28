@@ -42,7 +42,7 @@ namespace Game.Tests
         }
 
         [Fact]
-        public void ResChat은_로그인한_모두에게_보낸다()
+        public void ResChat은_근처의_플레이어와_자신에게_보낸다()
         {
             GameRoom room = new GameRoom();
             GameHandler handler = new GameHandler(room);
@@ -81,7 +81,7 @@ namespace Game.Tests
         }
 
         [Fact]
-        public void 이동하면_모두에게_MoveNtf를_보낸다()
+        public void 이동하면_근처의_플레이어와_자신에게_MoveNtf를_보낸다()
         {
             GameRoom room = new GameRoom();
             GameHandler handler = new GameHandler(room);

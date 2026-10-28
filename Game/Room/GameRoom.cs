@@ -8,6 +8,8 @@ namespace Game.Room
     public class GameRoom : JobSerializer
     {
         private const float MapSize = 100f;
+        private const int CellCount = 10;
+        private const float CellSize = MapSize / CellCount;
         private const int TickIntervalMs = 50;
         private const int MaxNameBytes = 64;
         private const int MaxTextBytes = 1024;
@@ -15,6 +17,8 @@ namespace Game.Room
 
         private readonly Dictionary<IGameSession, Player> _players =
             new Dictionary<IGameSession, Player>();
+        private readonly Dictionary<(int X, int Y), HashSet<Player>> _cells =
+            new Dictionary<(int X, int Y), HashSet<Player>>();
 
         public int SessionCount => _players.Count;
 
@@ -29,6 +33,7 @@ namespace Game.Room
 
         public void Tick()
         {
+            Dictionary<Player, byte[]> movePackets = new Dictionary<Player, byte[]>();
             foreach (Player player in _players.Values)
             {
                 if (!player.Moved || HasDisconnected(player.Session))
@@ -36,13 +41,60 @@ namespace Game.Room
                     continue;
                 }
 
-                player.Moved = false;
-                Console.WriteLine($"[GameRoom] 틱: {player.Session.Name} 위치 알림 → ({player.X}, {player.Y})");
-                byte[] packet = new MoveNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
-                foreach (IGameSession other in _players.Keys)
+                (int X, int Y) oldCell = CellOf(player);
+                player.X = player.PendingX;
+                player.Y = player.PendingY;
+                if (oldCell != CellOf(player))
                 {
-                    other.SendPacket(packet);
+                    RemoveFromCell(player, oldCell);
+                    AddToCell(player);
                 }
+
+                Console.WriteLine($"[GameRoom] 틱: {player.Session.Name} 위치 알림 → ({player.X}, {player.Y})");
+                movePackets[player] = new MoveNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
+            }
+
+            // 모든 위치를 확정한 다음 시야를 비교해야 이동 요청 순서가 결과를 바꾸지 않는다.
+            foreach (Player observer in _players.Values)
+            {
+                if (HasDisconnected(observer.Session))
+                {
+                    continue;
+                }
+
+                HashSet<Player> visible = FindNearbyPlayers(observer);
+                foreach (Player previous in observer.KnownPlayers)
+                {
+                    if (!visible.Contains(previous))
+                    {
+                        observer.Session.SendPacket(new PlayerLeaveNtf { Name = previous.Session.Name }.ToPacket());
+                    }
+                }
+
+                foreach (Player other in visible)
+                {
+                    if (!observer.KnownPlayers.Contains(other))
+                    {
+                        observer.Session.SendPacket(EnterPacket(other));
+                    }
+                    else if (movePackets.TryGetValue(other, out byte[]? packet))
+                    {
+                        observer.Session.SendPacket(packet);
+                    }
+                }
+
+                if (movePackets.TryGetValue(observer, out byte[]? ownPacket))
+                {
+                    observer.Session.SendPacket(ownPacket);
+                }
+
+                observer.KnownPlayers.Clear();
+                observer.KnownPlayers.UnionWith(visible);
+            }
+
+            foreach (Player player in _players.Values)
+            {
+                player.Moved = false;
             }
         }
 
@@ -78,18 +130,16 @@ namespace Game.Room
             session.State = GameSessionState.LoggedIn;
             Player player = new Player(session);
             _players[session] = player;
+            AddToCell(player);
             Console.WriteLine($"[GameRoom] 로그인: {name} (접속 {_players.Count}명)");
             session.SendPacket(PacketBuilder.Build(PacketId.Login, $"환영합니다, {name}님"));
 
-            byte[] enterPacket = new PlayerEnterNtf { Name = name, X = player.X, Y = player.Y }.ToPacket();
-            foreach (Player other in _players.Values)
+            byte[] enterPacket = EnterPacket(player);
+            foreach (Player other in FindNearbyPlayers(player))
             {
-                if (other.Session == session)
-                {
-                    continue;
-                }
-
-                session.SendPacket(new PlayerEnterNtf { Name = other.Session.Name, X = other.X, Y = other.Y }.ToPacket());
+                player.KnownPlayers.Add(other);
+                other.KnownPlayers.Add(player);
+                session.SendPacket(EnterPacket(other));
                 other.Session.SendPacket(enterPacket);
             }
         }
@@ -129,11 +179,17 @@ namespace Game.Room
                 return;
             }
 
-            Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({_players.Count}명에게)");
+            Player player = _players[session];
+            int recipientCount = 1 + player.KnownPlayers.Count(other => !HasDisconnected(other.Session));
+            Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
             byte[] packet = PacketBuilder.Build(PacketId.Chat, $"{session.Name}: {message}");
-            foreach (IGameSession other in _players.Keys)
+            session.SendPacket(packet);
+            foreach (Player other in player.KnownPlayers)
             {
-                other.SendPacket(packet);
+                if (!HasDisconnected(other.Session))
+                {
+                    other.Session.SendPacket(packet);
+                }
             }
         }
 
@@ -161,8 +217,8 @@ namespace Game.Room
                 return;
             }
 
-            player.X = req.X;
-            player.Y = req.Y;
+            player.PendingX = req.X;
+            player.PendingY = req.Y;
             player.Moved = true;
             Console.WriteLine($"[GameRoom] 이동 기록: {session.Name} → ({req.X}, {req.Y})");
         }
@@ -172,18 +228,78 @@ namespace Game.Room
             session.State = GameSessionState.Disconnected;
             session.Disconnect();
 
-            if (!_players.Remove(session))
+            if (!_players.Remove(session, out Player? player))
             {
                 return;
             }
 
+            RemoveFromCell(player, CellOf(player));
             Console.WriteLine($"[GameRoom] 퇴장: {session.Name} (접속 {_players.Count}명)");
             byte[] packet = new PlayerLeaveNtf { Name = session.Name }.ToPacket();
-            foreach (IGameSession other in _players.Keys)
+            foreach (Player other in player.KnownPlayers)
             {
-                other.SendPacket(packet);
+                if (other.KnownPlayers.Remove(player))
+                {
+                    other.Session.SendPacket(packet);
+                }
+            }
+            player.KnownPlayers.Clear();
+        }
+
+        private static (int X, int Y) CellOf(Player player) =>
+            (Math.Min((int)(player.X / CellSize), CellCount - 1),
+             Math.Min((int)(player.Y / CellSize), CellCount - 1));
+
+        private void AddToCell(Player player)
+        {
+            (int X, int Y) cell = CellOf(player);
+            if (!_cells.TryGetValue(cell, out HashSet<Player>? players))
+            {
+                players = new HashSet<Player>();
+                _cells[cell] = players;
+            }
+
+            players.Add(player);
+        }
+
+        private void RemoveFromCell(Player player, (int X, int Y) cell)
+        {
+            HashSet<Player> players = _cells[cell];
+            players.Remove(player);
+            if (players.Count == 0)
+            {
+                _cells.Remove(cell);
             }
         }
+
+        private HashSet<Player> FindNearbyPlayers(Player observer)
+        {
+            HashSet<Player> visible = new HashSet<Player>();
+            (int X, int Y) cell = CellOf(observer);
+            for (int x = Math.Max(0, cell.X - 1); x <= Math.Min(CellCount - 1, cell.X + 1); x++)
+            {
+                for (int y = Math.Max(0, cell.Y - 1); y <= Math.Min(CellCount - 1, cell.Y + 1); y++)
+                {
+                    if (!_cells.TryGetValue((x, y), out HashSet<Player>? players))
+                    {
+                        continue;
+                    }
+
+                    foreach (Player player in players)
+                    {
+                        if (player != observer && !HasDisconnected(player.Session))
+                        {
+                            visible.Add(player);
+                        }
+                    }
+                }
+            }
+
+            return visible;
+        }
+
+        private static byte[] EnterPacket(Player player) =>
+            new PlayerEnterNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
 
         private static bool IsInMap(float value) => value >= 0 && value <= MapSize;
 
