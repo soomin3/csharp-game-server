@@ -1,0 +1,14 @@
+{
+  "packets": [
+    { "name": "EchoReq", "id": 1, "idName": "Echo", "direction": "clientToServer", "fields": [{ "name": "Message", "type": "string" }] },
+    { "name": "EchoRes", "id": 1, "idName": "Echo", "direction": "serverToClient", "fields": [{ "name": "Message", "type": "string" }] },
+    { "name": "LoginReq", "id": 2, "idName": "Login", "direction": "clientToServer", "fields": [{ "name": "Name", "type": "string" }] },
+    { "name": "LoginRes", "id": 2, "idName": "Login", "direction": "serverToClient", "fields": [{ "name": "Message", "type": "string" }] },
+    { "name": "ChatReq", "id": 3, "idName": "Chat", "direction": "clientToServer", "fields": [{ "name": "Message", "type": "string" }] },
+    { "name": "ChatNtf", "id": 3, "idName": "Chat", "direction": "serverToClient", "fields": [{ "name": "Message", "type": "string" }] },
+    { "name": "MoveReq", "id": 4, "direction": "clientToServer", "fields": [{ "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
+    { "name": "MoveNtf", "id": 5, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }, { "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
+    { "name": "PlayerEnterNtf", "id": 6, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }, { "name": "X", "type": "float" }, { "name": "Y", "type": "float" }] },
+    { "name": "PlayerLeaveNtf", "id": 7, "direction": "serverToClient", "fields": [{ "name": "Name", "type": "string" }] }
+  ]
+}

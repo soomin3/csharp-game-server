@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Game\Game.csproj" />
+    <ProjectReference Include="..\PacketGenerator\PacketGenerator.csproj" />
   </ItemGroup>
 
 </Project>
