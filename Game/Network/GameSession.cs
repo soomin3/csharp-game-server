@@ -27,7 +27,7 @@ namespace Game.Network
         public string Name { get; set; } = "(로그인 전)";
         public GameSessionState State { get; set; } = GameSessionState.Connected;
 
-        public GameSession(TcpClient client, GameHandler handler) : base(client)
+        public GameSession(TcpClient client, GameHandler handler, SessionOptions? options = null) : base(client, options)
         {
             _handler = handler;
             _dispatcher = new PacketDispatcher(handler);

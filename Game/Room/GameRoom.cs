@@ -1,3 +1,4 @@
+using Game.Diagnostics;
 using Common.Job;
 using Common.Network;
 using Game.Network;
@@ -63,7 +64,7 @@ namespace Game.Room
                     AddToCell(player);
                 }
 
-                Console.WriteLine($"[GameRoom] 틱: {player.Session.Name} 위치 알림 → ({player.X}, {player.Y})");
+                if (GameLog.Verbose) Console.WriteLine($"[GameRoom] 틱: {player.Session.Name} 위치 알림 → ({player.X}, {player.Y})");
                 movePackets[player] = new MoveNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
             }
 
@@ -183,7 +184,7 @@ namespace Game.Room
                 return;
             }
 
-            Console.WriteLine($"[GameRoom] 에코: {session.Name} → '{message}'");
+            if (GameLog.Verbose) Console.WriteLine($"[GameRoom] 에코: {session.Name} → '{message}'");
             session.SendPacket(new EchoRes { Message = message }.ToPacket());
         }
 
@@ -207,7 +208,7 @@ namespace Game.Room
 
             Player player = _players[session];
             int recipientCount = 1 + player.KnownPlayers.Count(other => !HasDisconnected(other.Session));
-            Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
+            if (GameLog.Verbose) Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
             byte[] packet = new ChatNtf { Message = $"{session.Name}: {message}" }.ToPacket();
             session.SendPacket(packet);
             foreach (Player other in player.KnownPlayers)
@@ -246,7 +247,7 @@ namespace Game.Room
             player.PendingX = req.X;
             player.PendingY = req.Y;
             player.Moved = true;
-            Console.WriteLine($"[GameRoom] 이동 기록: {session.Name} → ({req.X}, {req.Y})");
+            if (GameLog.Verbose) Console.WriteLine($"[GameRoom] 이동 기록: {session.Name} → ({req.X}, {req.Y})");
         }
 
         public void HandleLeave(IGameSession session)

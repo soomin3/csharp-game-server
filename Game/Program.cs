@@ -1,58 +1,87 @@
-﻿using Common.Network;
-using Game.Network;
-using Game.Room;
-using Common.Job;
+using System.Text;
 using Common.Auth;
+using Common.Job;
+using Common.Logging;
+using Common.Network;
+using Game.Configuration;
+using Game.Diagnostics;
+using Game.Network;
 using Game.Persistence;
+using Game.Room;
 
-int port = ReadOption("--port", 7777);
-int workerCount = ReadOption("--workers", 2);
-int roomCount = ReadOption("--rooms", 3);
-TokenService tokens = TokenService.FromEnvironment();
-string dataPath = ReadStringOption("--data", Path.Combine(AppContext.BaseDirectory, "data", "players.db"));
-await using IPlayerStore store = new SqlitePlayerStore(dataPath);
-await store.DrainAsync();
-await using RoomScheduler scheduler = new RoomScheduler(workerCount);
-RoomManager manager = new RoomManager(scheduler, roomCount, store);
-GameHandler handler = new GameHandler(manager, tokens);
-using CancellationTokenSource tickStop = new CancellationTokenSource();
-List<Task> timers = new List<Task>();
-foreach (GameRoom room in manager.Rooms)
+Console.OutputEncoding = new UTF8Encoding(false);
+ServerOptions options;
+try { options = ServerOptions.Parse(args); }
+catch (ArgumentException error) { Console.Error.WriteLine(error.Message); return 2; }
+
+FileLog? fileLog = null;
+int exitCode = 1;
+try
 {
-    timers.Add(room.RunTickLoopAsync(tickStop.Token));
+    fileLog = new FileLog(options.LogPath);
+    exitCode = await RunServerAsync(options);
 }
-
-TServer server = new TServer(port, client => new GameSession(client, handler));
-try { await server.RunAsync(); }
-finally
+catch (Exception error)
 {
-    tickStop.Cancel();
-    await Task.WhenAll(timers);
-    manager.DisconnectAll();
-    await scheduler.DrainAsync();
-    await manager.DrainPersistenceAsync();
+    Console.Error.WriteLine($"[Game] 실행 실패: {error.GetType().Name}: {error.Message}");
+}
+finally { fileLog?.Dispose(); }
+return fileLog?.HasFileError == true ? 1 : exitCode;
+
+static async Task<int> RunServerAsync(ServerOptions options)
+{
+    TokenService tokens = TokenService.FromEnvironment();
+    GameLog.Verbose = !options.Quiet;
+    await using SqlitePlayerStore store = new SqlitePlayerStore(options.DataPath);
     await store.DrainAsync();
-    await scheduler.DrainAsync();
-}
-
-string ReadStringOption(string name, string fallback)
-{
-    int index = Array.IndexOf(args, name);
-    if (index < 0) { return fallback; }
-    if (index + 1 >= args.Length || string.IsNullOrWhiteSpace(args[index + 1]))
+    await using RoomScheduler scheduler = new RoomScheduler(options.Workers);
+    RoomManager manager = new RoomManager(scheduler, options.Rooms, store);
+    GameHandler handler = new GameHandler(manager, tokens);
+    SessionOptions sessionOptions = new SessionOptions { MaxPendingPackets = options.SendPackets, MaxPendingBytes = options.SendBytes };
+    TServer server = new TServer(options.Port, client => new GameSession(client, handler, sessionOptions));
+    using CancellationTokenSource accepting = new CancellationTokenSource();
+    using CancellationTokenSource ticks = new CancellationTokenSource();
+    if (options.ShutdownAfterSeconds > 0) accepting.CancelAfter(TimeSpan.FromSeconds(options.ShutdownAfterSeconds));
+    Task[] tickTasks = manager.Rooms.Select(room => room.RunTickLoopAsync(ticks.Token)).ToArray();
+    ConsoleCancelEventHandler cancelHandler = (_, input) => { input.Cancel = true; accepting.Cancel(); };
+    Console.CancelKeyPress += cancelHandler;
+    int failures = 0;
+    try
     {
-        throw new ArgumentException($"{name} 뒤에 경로가 필요합니다.");
+        Console.WriteLine($"[Game] 시작: 방 {options.Rooms}개, 워커 {options.Workers}개, 송신 한도 {options.SendPackets}개/{options.SendBytes}바이트");
+        await server.RunAsync(accepting.Token);
     }
-    return args[index + 1];
-}
-
-int ReadOption(string name, int fallback)
-{
-    int index = Array.IndexOf(args, name);
-    if (index < 0) { return fallback; }
-    if (index + 1 >= args.Length || !int.TryParse(args[index + 1], out int value) || value <= 0)
+    catch (Exception error)
     {
-        throw new ArgumentException($"{name} 뒤에 양의 정수가 필요합니다.");
+        failures++;
+        Console.Error.WriteLine($"[Game] 서버 오류: {error.GetType().Name}");
     }
-    return value;
+    finally
+    {
+        Console.CancelKeyPress -= cancelHandler;
+        server.StopAccepting();
+        ticks.Cancel();
+        await CleanupAsync("틱 종료", () => Task.WhenAll(tickTasks));
+        await CleanupAsync("접속 종료", () => server.DisconnectAllAsync());
+        manager.DisconnectAll();
+        await CleanupAsync("퇴장 처리", () => scheduler.DrainAsync());
+        await CleanupAsync("저장 작업", () => manager.DrainPersistenceAsync());
+        await CleanupAsync("DB 처리", () => store.DrainAsync());
+        await CleanupAsync("마지막 방 일감", () => scheduler.DrainAsync());
+        await CleanupAsync("워커 종료", () => scheduler.CompleteAsync());
+        await CleanupAsync("DB 종료", () => store.DisposeAsync().AsTask());
+        if (server.SessionFailureCount != 0) failures++;
+        Console.WriteLine($"[Game] 종료 완료: 저장·일감 정리, 남은 접속 {server.ActiveSessionCount}개, 오류 {failures}개");
+    }
+    return failures == 0 ? 0 : 1;
+
+    async Task CleanupAsync(string name, Func<Task> operation)
+    {
+        try { await operation(); }
+        catch (Exception error)
+        {
+            failures++;
+            Console.Error.WriteLine($"[Game] {name} 실패: {error.GetType().Name}");
+        }
+    }
 }

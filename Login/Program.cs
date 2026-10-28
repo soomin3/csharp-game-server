@@ -1,5 +1,7 @@
 using Common.Auth;
 
+Console.OutputEncoding = new System.Text.UTF8Encoding(false);
+
 var builder = WebApplication.CreateBuilder(args);
 TokenService tokens = TokenService.FromEnvironment();
 builder.Services.AddSingleton(tokens);
