@@ -22,6 +22,7 @@ namespace Game.Room
 
         public int SessionCount => _players.Count;
         public int RoomId { get; }
+        internal Action<GameRoom, Player>? PlayerRemoved { get; set; }
 
         public GameRoom(int roomId = 1, RoomScheduler? scheduler = null) : base(scheduler)
         {
@@ -110,7 +111,12 @@ namespace Game.Room
             }
         }
 
-        public void HandleLogin(IGameSession session, string name)
+        public void HandleLogin(IGameSession session, string name) => HandleLoginAt(session, name, 0, 0, false);
+
+        internal void HandleLoadedLogin(IGameSession session, string name, float x, float y) =>
+            HandleLoginAt(session, name, x, y, true);
+
+        private void HandleLoginAt(IGameSession session, string name, float x, float y, bool notifyRoom)
         {
             if (HasDisconnected(session))
             {
@@ -140,11 +146,15 @@ namespace Game.Room
 
             session.Name = name;
             session.State = GameSessionState.LoggedIn;
-            Player player = new Player(session);
+            Player player = new Player(session) { X = x, Y = y, PendingX = x, PendingY = y };
             _players[session] = player;
             AddToCell(player);
             Console.WriteLine($"[GameRoom] 로그인: {name} (접속 {_players.Count}명)");
             session.SendPacket(new LoginRes { Message = $"환영합니다, {name}님" }.ToPacket());
+            if (notifyRoom)
+            {
+                session.SendPacket(new ChangeRoomNtf { RoomId = RoomId, X = x, Y = y }.ToPacket());
+            }
             AnnounceEntry(player);
         }
 
@@ -256,6 +266,7 @@ namespace Game.Room
             }
 
             RemoveFromCell(player, CellOf(player));
+            PlayerRemoved?.Invoke(this, player);
             Console.WriteLine($"[GameRoom] 퇴장: {session.Name} (접속 {_players.Count}명)");
             byte[] packet = new PlayerLeaveNtf { Name = session.Name }.ToPacket();
             foreach (Player other in player.KnownPlayers)

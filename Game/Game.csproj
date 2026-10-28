@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.20" />
   </ItemGroup>
 
   <PropertyGroup>
