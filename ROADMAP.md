@@ -17,8 +17,8 @@
 
 - 현재 구현한 TCP 통신, 패킷 경계 처리, 로그인·채팅·이동, 일감 줄을 이용한 순차 처리와 테스트를 포트폴리오에 설명한다.
 - 제출 전에 README에 프로젝트 목적, 실행 방법, 구조, 구현 범위, 테스트 결과, 알려진 한계를 정리한다. 제출할 저장소 링크가 열리는지도 확인한다.
-- 구현 완료 표시는 원본에 적용하고 검증한 범위만 쓴다. **2026-10-28 기준 1~17단계를 원본에 적용하고 검증했다.**
-- 18~21단계는 장기 개발 계획으로 유지한다. 지원 마감까지의 제출 범위는 실제로 완성하고 확인한 내용을 기준으로 정한다.
+- 구현 완료 표시는 원본에 적용하고 검증한 범위만 쓴다. **2026-10-28 기준 1~18단계를 원본에 적용하고 검증했다.**
+- 19~21단계는 장기 개발 계획으로 유지한다. 지원 마감까지의 제출 범위는 실제로 완성하고 확인한 내용을 기준으로 정한다.
 
 ---
 
@@ -62,12 +62,12 @@
 
 | 항목 | 상태 (2026-10-28 확인) |
 |---|---|
-| 완료 | **1~17단계** |
+| 완료 | **1~18단계** |
 | 빌드 | 경고 0개, 오류 0개 |
-| 테스트 | `dotnet test --no-build` 159개 통과 |
-| 실행 검증 | 복사본(17777) 3방·2워커에서 방 이동 좌표 보존과 옛 시야 퇴장→방 응답→새 시야 입장, 방간 채팅 차단·전역 이름 중복 거절 확인. 실제 DummyClient /room도 확인, 검증 서버 종료. |
+| 테스트 | `dotnet test --no-build` 200개 통과 |
+| 실행 검증 | HTTP 발급→복사본 Game(17777)의 토큰 로그인·채팅·이동·방 이동 확인. 실제 DummyClient도 성공. 빈값·이름만·변조·다른키·issuer·만료 토큰 6종 연결 종료와 키 누락 시작 거절 확인. 검증 서비스 종료. |
 | 지원 준비 우선순위 | **2026-10-28 넥슨코리아 지원용 제출 자료 정리.** 현재 구현 범위, 실행 방법, 검증 근거와 한계를 설명한다. |
-| 다음 개발 작업 | **18단계: 로그인 서버와 토큰** |
+| 다음 개발 작업 | **19단계: DB 저장** |
 
 ---
 
@@ -100,12 +100,13 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 | `Common/Network/Generated/PacketId.g.cs` | 패킷 번호: None 0, Echo 1, Login 2, Chat 3, MoveReq 4, MoveNtf 5, PlayerEnterNtf 6, PlayerLeaveNtf 7, ChangeRoomReq 8, ChangeRoomNtf 9 |
 | `Common/Network/PacketFramer.cs` | 받은 바이트를 패킷 단위로 자르기 |
 | `Protocol/packets.json` · `PacketGenerator/` | 패킷 형식의 원본과 코드 생성 도구. 생성 파일은 직접 수정하지 않음 |
-| `Common/Network/Generated/LoginReq.g.cs` · `LoginRes.g.cs` | 로그인 요청 / 응답 (길이를 포함한 문자열) |
+| `Common/Network/Generated/LoginReq.g.cs` · `LoginRes.g.cs` | 서명 토큰 로그인 요청 / 환영 응답 |
 | `Common/Network/Generated/EchoReq.g.cs` · `EchoRes.g.cs` · `ChatReq.g.cs` · `ChatNtf.g.cs` | 에코·채팅 요청과 응답 / 알림 |
 | `Common/Network/BAWriter.cs` · `BAReader.cs` | 숫자·문자열을 바이트로 쓰고 읽기 (struct) |
 | `Common/Network/Generated/MoveReq.g.cs` · `MoveNtf.g.cs` | 이동 요청 / 이동 알림 패킷 |
 | `Common/Network/Generated/PlayerEnterNtf.g.cs` · `PlayerLeaveNtf.g.cs` | 입장 시 위치 알림 / 퇴장 알림 패킷 |
 | `Common/Network/TServer.cs` | 접속 받기. 세션을 만드는 함수(Func)를 받아서 씀 |
+| `Common/Auth/TokenService.cs` | 사설 HMAC 토큰 발급·검증, 발급자·이름·만료 검사. MY_SERVER_TOKEN_KEY는 환경에서 공유 |
 | `Common/Network/TSession.cs` | 접속 하나를 맡음: 받기·보내기 루프, 멱등 Disconnect와 종료 정리 (abstract) |
 | `Common/Job/JobSerializer.cs` | 방 일감 줄: Push / Flush / Barrier와 워커 실행 예약 |
 | `Common/Job/RoomScheduler.cs` | 준비된 방 줄, 고정 워커, 32개씩 처리, Drain / Complete |
@@ -116,9 +117,9 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 | `Game/Network/Generated/PacketDispatcher.g.cs` · `IPacketHandler.g.cs` | 소켓과 분리한 패킷 검증·분배 계약 |
 | `Game/Room/Player.cs` | 세션, 틱 확정 위치·예정 위치, 이동 여부와 알려진 상대 집합 저장 |
 | `Game/Room/GameRoom.cs` | Dictionary 명단·셀 인덱스, 틱에서 위치·시야 확정, 근처 상대에게 알림 |
-| `DummyClient/Program.cs` | 이름 입력 후 채팅, `/move x y`로 이동, `/room 2`로 방 이동 |
+| `DummyClient/Program.cs` | 이름 입력 → HTTP 토큰 발급 → 게임 접속. 채팅, `/move x y`, `/room 2` |
 | `Game.Tests/FakeGameSession.cs` | 소켓 없는 가짜 세션 (보낸 패킷을 기록) |
-| `Login/Program.cs` | 템플릿 그대로 (아직 안 씀) |
+| `Login/Program.cs` | POST /login에서 이름을 확인해 데모 토큰 발급 |
 
 ---
 
@@ -164,12 +165,9 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 
 ### 묶음 D. 서비스 형태
 
-#### 18. 로그인 서버와 토큰
-- **목표:** Login 프로젝트(HTTP 서버)가 로그인하면 토큰(접속 허가증)을 발급하고, Game은 로그인 패킷에 담긴 토큰을 검증한다.
-- **왜:** 지금은 이름만 보내면 누구나 들어온다.
-- **범위:** 넣을 것은 Login의 로그인 주소, 토큰 발급·검증, 클라 흐름(HTTP 로그인 → 게임 접속). 뺄 것은 DB(19).
-- **완료 기준:** 토큰이 없거나 틀리면 게임 로그인이 거부되고, 맞으면 입장한다.
-- **상태:** 예정
+| 완료한 단계 | 만든 것 | 처음 배운 C# |
+|---|---|---|
+| 18. 로그인 서버와 토큰 | HTTP 데모 로그인, 공유 환경 키로 HMAC 토큰 발급·검증, 클라 HTTP→TCP 흐름 | HMACSHA256, 고정시간 비교, TimeProvider, ASP.NET Core Minimal API |
 
 #### 19. DB 저장
 - **목표:** 캐릭터(이름, 위치)를 저장하고 불러온다. 다시 접속하면 마지막 위치에서 시작한다.
@@ -198,7 +196,7 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 | 내용 | 다룰 단계 |
 |---|---|
 | Echo 패킷은 서버 처리와 테스트에만 있고, 클라는 더 이상 보내지 않는다 | 15 |
-| `Login` 프로젝트는 템플릿(Hello World) 그대로다 | 18 |
+| HTTP 로그인은 이름으로 토큰을 발급하는 데모이며 계정·비밀번호 인증은 없다 | 서비스 확장 과제 |
 | `Name`이 세션(연결 객체)에 있다. 게임 상태이니 `Player`로 옮길 후보다 | 11 이후 |
 | 보내기 줄(`Channel.CreateUnbounded`)에 크기 제한이 없다 | 20 |
 | 서버를 정상적으로 끄는 처리가 없다 (Ctrl+C로 끔) | 20 |
@@ -240,3 +238,4 @@ cd E:/MyServer && dotnet run --project DummyClient
 - 2026-10-28: 15단계 완료 (패킷 형식 통일과 분배기 분리). 빌드 경고·오류 0개, 테스트 106개 통과. 실행 확인: 복사본(17777)의 실제 DummyClient 2개로 새 패킷 형식의 로그인·입퇴장·한글 채팅·이동 확인, EchoReq/Res 왕복 확인. 클라 정상 종료, 검증 서버 종료.
 - 2026-10-28: 16단계 완료 (패킷 코드 자동 생성). 빌드 경고·오류 0개, 테스트 132개 통과. 실행 확인: TEMP에서 ProbeReq 정의 추가→코드 생성→전체 빌드·특수 이름 필드 왕복·미구현 요청 TCP 종료 확인. 복사본(17777)의 실제 클라 2개로 기존 흐름 유지 확인. 검증 서버 종료.
 - 2026-10-28: 17단계 완료 (방 여러 개와 워커 스레드). 빌드 경고·오류 0개, 테스트 159개 통과. 실행 확인: 복사본(17777) 3방·2워커에서 방 이동 좌표 보존과 옛 시야 퇴장→방 응답→새 시야 입장, 방간 채팅 차단·전역 이름 중복 거절 확인. 실제 DummyClient /room도 확인, 검증 서버 종료.
+- 2026-10-28: 18단계 완료 (로그인 서버와 토큰). 빌드 경고·오류 0개, 테스트 200개 통과. 실행 확인: HTTP 발급→복사본 Game(17777)의 토큰 로그인·채팅·이동·방 이동 확인. 실제 DummyClient도 성공. 빈값·이름만·변조·다른키·issuer·만료 토큰 6종 연결 종료와 키 누락 시작 거절 확인. 검증 서비스 종료.

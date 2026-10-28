@@ -10,14 +10,14 @@ namespace Game.Tests
         public void 모든_문자열_요청과_응답은_길이와_한글을_보존한다()
         {
             const string text = "김철수 안녕하세요";
-            byte[] loginReq = new LoginReq { Name = text }.ToPacket();
+            byte[] loginReq = new LoginReq { Token = text }.ToPacket();
             byte[] loginRes = new LoginRes { Message = text }.ToPacket();
             byte[] echoReq = new EchoReq { Message = text }.ToPacket();
             byte[] echoRes = new EchoRes { Message = text }.ToPacket();
             byte[] chatReq = new ChatReq { Message = text }.ToPacket();
             byte[] chatNtf = new ChatNtf { Message = text }.ToPacket();
 
-            Assert.Equal(text, LoginReq.ToValue(loginReq, PacketHeader.Size, loginReq.Length - PacketHeader.Size)?.Name);
+            Assert.Equal(text, LoginReq.ToValue(loginReq, PacketHeader.Size, loginReq.Length - PacketHeader.Size)?.Token);
             Assert.Equal(text, LoginRes.ToValue(loginRes, PacketHeader.Size, loginRes.Length - PacketHeader.Size)?.Message);
             Assert.Equal(text, EchoReq.ToValue(echoReq, PacketHeader.Size, echoReq.Length - PacketHeader.Size)?.Message);
             Assert.Equal(text, EchoRes.ToValue(echoRes, PacketHeader.Size, echoRes.Length - PacketHeader.Size)?.Message);

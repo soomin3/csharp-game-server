@@ -5,12 +5,12 @@ namespace Common.Network
 {
     public sealed class LoginReq
     {
-        public string Name { get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
 
         public byte[] ToPacket()
         {
-            global::Common.Network.BAWriter writer = new global::Common.Network.BAWriter(checked(sizeof(int) + global::System.Text.Encoding.UTF8.GetByteCount(this.Name)));
-            writer.PutString(this.Name);
+            global::Common.Network.BAWriter writer = new global::Common.Network.BAWriter(checked(sizeof(int) + global::System.Text.Encoding.UTF8.GetByteCount(this.Token)));
+            writer.PutString(this.Token);
             return writer.ToPacket(global::Common.Network.PacketId.Login);
         }
 
@@ -18,7 +18,7 @@ namespace Common.Network
         {
             global::Common.Network.BAReader reader = new global::Common.Network.BAReader(buffer, offset, length);
             LoginReq packet = new LoginReq();
-            packet.Name = reader.GetString();
+            packet.Token = reader.GetString();
             return reader.IsComplete ? packet : null;
         }
     }

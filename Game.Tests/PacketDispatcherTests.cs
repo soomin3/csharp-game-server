@@ -14,7 +14,7 @@ namespace Game.Tests
         {
             byte[] bytes = id switch
             {
-                PacketId.Login => new LoginReq { Name = "김철수" }.ToPacket(),
+                PacketId.Login => new LoginReq { Token = "김철수" }.ToPacket(),
                 PacketId.Echo => new EchoReq { Message = "김철수" }.ToPacket(),
                 _ => new ChatReq { Message = "김철수" }.ToPacket()
             };
@@ -27,7 +27,7 @@ namespace Game.Tests
             Assert.Same(session, handler.Session);
             string text = id switch
             {
-                PacketId.Login => Assert.IsType<LoginReq>(handler.Packet).Name,
+                PacketId.Login => Assert.IsType<LoginReq>(handler.Packet).Token,
                 PacketId.Echo => Assert.IsType<EchoReq>(handler.Packet).Message,
                 _ => Assert.IsType<ChatReq>(handler.Packet).Message
             };
@@ -77,7 +77,7 @@ namespace Game.Tests
         {
             SpyHandler handler = new SpyHandler();
             FakeGameSession session = new FakeGameSession();
-            byte[] bytes = new LoginReq { Name = "Kim" }.ToPacket();
+            byte[] bytes = new LoginReq { Token = "Kim" }.ToPacket();
 
             Assert.False(new PacketDispatcher(handler).Dispatch(session, PacketId.Login, bytes, offset, length));
 
@@ -104,7 +104,7 @@ namespace Game.Tests
         [Fact]
         public void 남는_본문이_있으면_요청을_거절한다()
         {
-            byte[] bytes = new LoginReq { Name = "Kim" }.ToPacket().Concat(new byte[] { 0 }).ToArray();
+            byte[] bytes = new LoginReq { Token = "Kim" }.ToPacket().Concat(new byte[] { 0 }).ToArray();
             SpyHandler handler = new SpyHandler();
             FakeGameSession session = new FakeGameSession();
 
@@ -117,7 +117,7 @@ namespace Game.Tests
         [Fact]
         public void 연결을_끊은_뒤의_패킷은_핸들러로_전달하지_않는다()
         {
-            byte[] bytes = new LoginReq { Name = "Kim" }.ToPacket();
+            byte[] bytes = new LoginReq { Token = "Kim" }.ToPacket();
             SpyHandler handler = new SpyHandler();
             FakeGameSession session = new FakeGameSession();
             PacketDispatcher dispatcher = new PacketDispatcher(handler);

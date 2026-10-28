@@ -2,13 +2,15 @@
 using Game.Network;
 using Game.Room;
 using Common.Job;
+using Common.Auth;
 
 int port = ReadOption("--port", 7777);
 int workerCount = ReadOption("--workers", 2);
 int roomCount = ReadOption("--rooms", 3);
+TokenService tokens = TokenService.FromEnvironment();
 await using RoomScheduler scheduler = new RoomScheduler(workerCount);
 RoomManager manager = new RoomManager(scheduler, roomCount);
-GameHandler handler = new GameHandler(manager);
+GameHandler handler = new GameHandler(manager, tokens);
 foreach (GameRoom room in manager.Rooms)
 {
     _ = room.RunTickLoopAsync();

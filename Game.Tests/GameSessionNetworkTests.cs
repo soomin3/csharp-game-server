@@ -4,11 +4,13 @@ using System.Net.Sockets;
 using Common.Network;
 using Game.Network;
 using Game.Room;
+using Common.Auth;
 
 namespace Game.Tests
 {
     public class GameSessionNetworkTests
     {
+        private static readonly TokenService Tokens = new TokenService(Enumerable.Range(1, 32).Select(value => (byte)value).ToArray());
         public static IEnumerable<object[]> InvalidPackets()
         {
             yield return Case("unknown id", Build((PacketId)65000, new byte[] { 1 }));
@@ -31,9 +33,11 @@ namespace Game.Tests
             byte[] emptyFrame = new byte[PacketHeader.Size];
             BinaryPrimitives.WriteUInt16LittleEndian(emptyFrame, PacketHeader.Size);
             yield return Case("header-only frame", emptyFrame);
+            yield return Case("empty login token", new LoginReq { Token = "" }.ToPacket());
+            yield return Case("name without a token", new LoginReq { Token = "Kim" }.ToPacket());
 
             byte[] unknown = Build((PacketId)65000, new byte[] { 1 });
-            byte[] login = new LoginReq { Name = "Kim" }.ToPacket();
+            byte[] login = new LoginReq { Token = Tokens.Issue("Kim").Token }.ToPacket();
             yield return Case("bad packet followed by Login", unknown.Concat(login).ToArray());
             yield return Case("queued Login followed by bad packet", login.Concat(unknown).ToArray());
         }
@@ -44,7 +48,7 @@ namespace Game.Tests
         {
             using ConnectedSockets sockets = await ConnectedSockets.CreateAsync();
             GameRoom room = new GameRoom();
-            GameSession session = new GameSession(sockets.Server, new GameHandler(room));
+            GameSession session = new GameSession(sockets.Server, new GameHandler(room, Tokens));
             Task sessionTask = session.RunAsync();
 
             try
