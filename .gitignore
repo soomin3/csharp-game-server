@@ -429,3 +429,6 @@ FodyWeavers.xsd
 
 # Local demo database. Reproducible benchmark summaries are kept in benchmarks/.
 /data/
+
+# Local planning notes
+/ROADMAP.md
