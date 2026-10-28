@@ -20,6 +20,7 @@ namespace Game.Tests
             room.Flush();
 
             Assert.Equal("Kim", session.Name);
+            Assert.Equal(GameSessionState.LoggedIn, session.State);
             byte[] packet = Assert.Single(session.SentPackets);
             Assert.Equal(PacketId.Login, IdOf(packet));
             Assert.Equal("환영합니다, Kim님", TextOf(packet));
@@ -115,6 +116,7 @@ namespace Game.Tests
             room.Tick();
 
             Assert.Single(kim.SentPackets);
+            Assert.False(kim.IsDisconnected);
         }
 
         [Fact]

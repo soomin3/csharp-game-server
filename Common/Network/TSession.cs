@@ -11,6 +11,9 @@ namespace Common.Network
         private readonly byte[] _recvBuffer = new byte[ushort.MaxValue];
         private readonly Channel<byte[]> _sendChannel = Channel.CreateUnbounded<byte[]>();
         private int _recvSize;
+        private int _disconnected;
+
+        public bool IsDisconnected => Volatile.Read(ref _disconnected) != 0;
 
         protected TSession(TcpClient client)
         {
@@ -20,12 +23,14 @@ namespace Common.Network
 
         public async Task RunAsync()
         {
-            OnSessionConnected();
-            Task sendTask = SendLoopAsync();
+            Task sendTask = Task.CompletedTask;
 
             try
             {
-                while (true)
+                OnSessionConnected();
+                sendTask = SendLoopAsync();
+
+                while (!IsDisconnected)
                 {
                     int received = await _stream.ReadAsync(_readBuffer);
                     if (received == 0)
@@ -41,21 +46,44 @@ namespace Common.Network
                     }
                 }
             }
-            catch (IOException e)
+            catch (Exception e) when (e is IOException or SocketException or ObjectDisposedException)
             {
-                Console.WriteLine($"[TSession] 연결 오류: {e.Message}");
+                if (!IsDisconnected)
+                {
+                    Console.WriteLine($"[TSession] 연결 오류: {e.Message}");
+                }
             }
-
-            _sendChannel.Writer.Complete();
-            await sendTask;
-
-            OnSessionDisconnected();
-            _client.Close();
+            finally
+            {
+                Disconnect();
+                try
+                {
+                    await sendTask;
+                }
+                finally
+                {
+                    OnSessionDisconnected();
+                }
+            }
         }
 
         public void SendPacket(byte[] packet)
         {
-            _sendChannel.Writer.TryWrite(packet);
+            if (!IsDisconnected)
+            {
+                _sendChannel.Writer.TryWrite(packet);
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (Interlocked.Exchange(ref _disconnected, 1) != 0)
+            {
+                return;
+            }
+
+            _sendChannel.Writer.TryComplete();
+            _client.Close();
         }
 
         private async Task SendLoopAsync()
@@ -67,8 +95,9 @@ namespace Common.Network
                     await _stream.WriteAsync(packet);
                 }
             }
-            catch (IOException)
+            catch (Exception e) when (e is IOException or SocketException or ObjectDisposedException)
             {
+                Disconnect();
             }
         }
 
