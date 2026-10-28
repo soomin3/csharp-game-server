@@ -18,7 +18,7 @@ namespace Common.Network
             BAReader reader = new BAReader(buffer, offset, length);
             PlayerLeaveNtf ntf = new PlayerLeaveNtf();
             ntf.Name = reader.GetString();
-            if (!reader.IsValid)
+            if (!reader.IsComplete)
             {
                 return null;
             }

@@ -132,7 +132,7 @@ namespace Game.Room
             _players[session] = player;
             AddToCell(player);
             Console.WriteLine($"[GameRoom] 로그인: {name} (접속 {_players.Count}명)");
-            session.SendPacket(PacketBuilder.Build(PacketId.Login, $"환영합니다, {name}님"));
+            session.SendPacket(new LoginRes { Message = $"환영합니다, {name}님" }.ToPacket());
 
             byte[] enterPacket = EnterPacket(player);
             foreach (Player other in FindNearbyPlayers(player))
@@ -158,7 +158,7 @@ namespace Game.Room
             }
 
             Console.WriteLine($"[GameRoom] 에코: {session.Name} → '{message}'");
-            session.SendPacket(PacketBuilder.Build(PacketId.Echo, message));
+            session.SendPacket(new EchoRes { Message = message }.ToPacket());
         }
 
         public void HandleChat(IGameSession session, string message)
@@ -182,7 +182,7 @@ namespace Game.Room
             Player player = _players[session];
             int recipientCount = 1 + player.KnownPlayers.Count(other => !HasDisconnected(other.Session));
             Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
-            byte[] packet = PacketBuilder.Build(PacketId.Chat, $"{session.Name}: {message}");
+            byte[] packet = new ChatNtf { Message = $"{session.Name}: {message}" }.ToPacket();
             session.SendPacket(packet);
             foreach (Player other in player.KnownPlayers)
             {

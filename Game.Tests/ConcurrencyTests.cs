@@ -2,7 +2,6 @@
 using Game.Room;
 using Common.Network;
 using System.Collections.Concurrent;
-using System.Text;
 
 namespace Game.Tests
 {
@@ -37,7 +36,7 @@ namespace Game.Tests
                 Assert.Single(session.SentPackets.Where(packet => IdOf(packet) == PacketId.Login));
                 Assert.Contains(session.SentPackets, packet =>
                     IdOf(packet) == PacketId.Chat &&
-                    Encoding.UTF8.GetString(packet, PacketHeader.Size, packet.Length - PacketHeader.Size) == $"{session.Name}: hi");
+                    ChatNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size)?.Message == $"{session.Name}: hi");
             });
         }
 

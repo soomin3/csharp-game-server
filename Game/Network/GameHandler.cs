@@ -3,7 +3,7 @@ using Game.Room;
 
 namespace Game.Network
 {
-    public class GameHandler
+    public class GameHandler : IPacketHandler
     {
         private readonly GameRoom _room;
 
@@ -11,6 +11,10 @@ namespace Game.Network
         {
             _room = room;
         }
+
+        public void ResLogin(IGameSession session, LoginReq packet) => ResLogin(session, packet.Name);
+        public void ResEcho(IGameSession session, EchoReq packet) => ResEcho(session, packet.Message);
+        public void ResChat(IGameSession session, ChatReq packet) => ResChat(session, packet.Message);
 
         public void ResLogin(IGameSession session, string name)
         {

@@ -24,7 +24,7 @@ namespace Common.Network
             ntf.Name = reader.GetString();
             ntf.X = reader.GetFloat();
             ntf.Y = reader.GetFloat();
-            if (!reader.IsValid)
+            if (!reader.IsComplete)
             {
                 return null;
             }

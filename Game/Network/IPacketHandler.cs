@@ -1,0 +1,28 @@
+using Common.Network;
+
+namespace Game.Network
+{
+    public interface IPacketHandler
+    {
+        void ResEcho(IGameSession session, EchoReq packet)
+        {
+            session.Disconnect("Unhandled packet: EchoReq");
+        }
+
+        void ResLogin(IGameSession session, LoginReq packet)
+        {
+            session.Disconnect("Unhandled packet: LoginReq");
+        }
+
+        void ResChat(IGameSession session, ChatReq packet)
+        {
+            session.Disconnect("Unhandled packet: ChatReq");
+        }
+
+        void ResMove(IGameSession session, MoveReq packet)
+        {
+            session.Disconnect("Unhandled packet: MoveReq");
+        }
+
+    }
+}

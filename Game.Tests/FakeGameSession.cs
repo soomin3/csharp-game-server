@@ -7,6 +7,7 @@ namespace Game.Tests
         public string Name { get; set; } = "(로그인 전)";
         public GameSessionState State { get; set; } = GameSessionState.Connected;
         public bool IsDisconnected { get; private set; }
+        public string? DisconnectReason { get; private set; }
         public List<byte[]> SentPackets { get; } = new List<byte[]>();
 
         public void SendPacket(byte[] packet)
@@ -17,8 +18,12 @@ namespace Game.Tests
             }
         }
 
-        public void Disconnect()
+        public void Disconnect(string? reason = null)
         {
+            if (!IsDisconnected)
+            {
+                DisconnectReason = reason;
+            }
             IsDisconnected = true;
         }
     }

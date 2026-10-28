@@ -16,9 +16,9 @@ namespace Game.Tests
             yield return Case("server MoveNtf", new MoveNtf { Name = "Kim", X = 1, Y = 2 }.ToPacket());
             yield return Case("server PlayerEnterNtf", new PlayerEnterNtf { Name = "Kim", X = 1, Y = 2 }.ToPacket());
             yield return Case("server PlayerLeaveNtf", new PlayerLeaveNtf { Name = "Kim" }.ToPacket());
-            yield return Case("invalid UTF8 Login", Build(PacketId.Login, new byte[] { 0xc3, 0x28 }));
-            yield return Case("invalid UTF8 Chat", Build(PacketId.Chat, new byte[] { 0xc3, 0x28 }));
-            yield return Case("invalid UTF8 Echo", Build(PacketId.Echo, new byte[] { 0xc3, 0x28 }));
+            yield return Case("invalid UTF8 Login", Build(PacketId.Login, StringBody(new byte[] { 0xc3, 0x28 })));
+            yield return Case("invalid UTF8 Chat", Build(PacketId.Chat, StringBody(new byte[] { 0xc3, 0x28 })));
+            yield return Case("invalid UTF8 Echo", Build(PacketId.Echo, StringBody(new byte[] { 0xc3, 0x28 })));
             yield return Case("short MoveReq", Build(PacketId.MoveReq, new byte[4]));
             yield return Case("long MoveReq", Build(PacketId.MoveReq, new byte[9]));
             yield return Case("NaN", new MoveReq { X = float.NaN, Y = 1 }.ToPacket());
@@ -30,7 +30,7 @@ namespace Game.Tests
             yield return Case("header-only frame", emptyFrame);
 
             byte[] unknown = Build((PacketId)65000, new byte[] { 1 });
-            byte[] login = PacketBuilder.Build(PacketId.Login, "Kim");
+            byte[] login = new LoginReq { Name = "Kim" }.ToPacket();
             yield return Case("bad packet followed by Login", unknown.Concat(login).ToArray());
             yield return Case("queued Login followed by bad packet", login.Concat(unknown).ToArray());
         }
@@ -71,7 +71,7 @@ namespace Game.Tests
 
             session.Disconnect();
             session.Disconnect();
-            session.SendPacket(PacketBuilder.Build(PacketId.Echo, "ignored"));
+            session.SendPacket(new EchoRes { Message = "ignored" }.ToPacket());
 
             await sessionTask.WaitAsync(TimeSpan.FromSeconds(5));
             Assert.True(session.IsDisconnected);
@@ -95,6 +95,14 @@ namespace Game.Tests
         }
 
         private static object[] Case(string scenario, byte[] packet) => new object[] { scenario, packet };
+
+        private static byte[] StringBody(byte[] bytes)
+        {
+            byte[] body = new byte[sizeof(int) + bytes.Length];
+            BinaryPrimitives.WriteInt32LittleEndian(body, bytes.Length);
+            bytes.CopyTo(body, sizeof(int));
+            return body;
+        }
 
         private static byte[] Build(PacketId id, byte[] body)
         {

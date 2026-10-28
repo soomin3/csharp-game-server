@@ -5,18 +5,26 @@ namespace Common.Network
 {
     public struct BAReader
     {
+        private static readonly UTF8Encoding StrictUtf8 = new UTF8Encoding(false, true);
         private readonly byte[] _bytes;
         private readonly int _end;
         private int _offset;
 
         public bool IsValid { get; private set; }
+        public bool IsComplete => IsValid && _offset == _end;
 
         public BAReader(byte[] bytes, int offset, int length)
         {
-            _bytes = bytes;
-            _offset = offset;
-            _end = offset + length;
-            IsValid = true;
+            _bytes = bytes ?? Array.Empty<byte>();
+            _offset = 0;
+            _end = 0;
+            IsValid = bytes != null && offset >= 0 && length >= 0 &&
+                offset <= bytes.Length && length <= bytes.Length - offset;
+            if (IsValid)
+            {
+                _offset = offset;
+                _end = offset + length;
+            }
         }
 
         public int GetInt()
@@ -40,6 +48,10 @@ namespace Common.Network
 
             float value = BinaryPrimitives.ReadSingleLittleEndian(_bytes.AsSpan(_offset));
             _offset += sizeof(float);
+            if (!float.IsFinite(value))
+            {
+                IsValid = false;
+            }
             return value;
         }
 
@@ -51,9 +63,17 @@ namespace Common.Network
                 return string.Empty;
             }
 
-            string value = Encoding.UTF8.GetString(_bytes, _offset, length);
-            _offset += length;
-            return value;
+            try
+            {
+                string value = StrictUtf8.GetString(_bytes, _offset, length);
+                _offset += length;
+                return value;
+            }
+            catch (DecoderFallbackException)
+            {
+                IsValid = false;
+                return string.Empty;
+            }
         }
 
         private bool CanRead(int size)

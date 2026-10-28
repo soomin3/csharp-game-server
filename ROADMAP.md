@@ -17,8 +17,8 @@
 
 - 현재 구현한 TCP 통신, 패킷 경계 처리, 로그인·채팅·이동, 일감 줄을 이용한 순차 처리와 테스트를 포트폴리오에 설명한다.
 - 제출 전에 README에 프로젝트 목적, 실행 방법, 구조, 구현 범위, 테스트 결과, 알려진 한계를 정리한다. 제출할 저장소 링크가 열리는지도 확인한다.
-- 구현 완료 표시는 원본에 적용하고 검증한 범위만 쓴다. **2026-10-28 기준 1~14단계를 원본에 적용하고 검증했다.**
-- 15~21단계는 장기 개발 계획으로 유지한다. 지원 마감까지의 제출 범위는 실제로 완성하고 확인한 내용을 기준으로 정한다.
+- 구현 완료 표시는 원본에 적용하고 검증한 범위만 쓴다. **2026-10-28 기준 1~15단계를 원본에 적용하고 검증했다.**
+- 16~21단계는 장기 개발 계획으로 유지한다. 지원 마감까지의 제출 범위는 실제로 완성하고 확인한 내용을 기준으로 정한다.
 
 ---
 
@@ -62,12 +62,12 @@
 
 | 항목 | 상태 (2026-10-28 확인) |
 |---|---|
-| 완료 | **1~14단계** |
+| 완료 | **1~15단계** |
 | 빌드 | 경고 0개, 오류 0개 |
-| 테스트 | `dotnet test --no-build` 72개 통과 |
-| 실행 검증 | 복사본(17777) 3클라로 먼 상대의 이동·채팅 0개, 시야 이탈·재접근의 양방향 퇴장·입장, 입장과 이동 중복 0개, 종료 시 퇴장 확인. 검증 서버 종료. |
+| 테스트 | `dotnet test --no-build` 106개 통과 |
+| 실행 검증 | 복사본(17777)의 실제 DummyClient 2개로 새 패킷 형식의 로그인·입퇴장·한글 채팅·이동 확인, EchoReq/Res 왕복 확인. 클라 정상 종료, 검증 서버 종료. |
 | 지원 준비 우선순위 | **2026-10-28 넥슨코리아 지원용 제출 자료 정리.** 현재 구현 범위, 실행 방법, 검증 근거와 한계를 설명한다. |
-| 다음 개발 작업 | **15단계: 패킷 형식 통일과 분배기 분리** |
+| 다음 개발 작업 | **16단계: 패킷 코드 자동 생성** |
 
 ---
 
@@ -79,7 +79,7 @@
 DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 스레드)
                        │ PacketFramer: 바이트를 패킷 단위로 자름
                        ▼
-                     GameSession.OnPacket: 번호(PacketId)로 갈라서 패킷 내용을 풂
+                     GameSession.OnPacket → PacketDispatcher: 번호로 분배하고 본문 검증
                        ▼
                      GameHandler.ResXxx: 방에 일감을 넣기만 함 (Push)
                        ▼
@@ -99,17 +99,18 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 | `Common/Network/PacketHeader.cs` | 헤더 4바이트(길이 2 + 종류 2) 상수 |
 | `Common/Network/PacketId.cs` | 패킷 번호: None 0, Echo 1, Login 2, Chat 3, MoveReq 4, MoveNtf 5, PlayerEnterNtf 6, PlayerLeaveNtf 7 |
 | `Common/Network/PacketFramer.cs` | 받은 바이트를 패킷 단위로 자르기 |
-| `Common/Network/PacketBuilder.cs` | 문자열 패킷 만들기 (Login / Chat / Echo) |
+| `Common/Network/LoginReq.cs` · `LoginRes.cs` | 로그인 요청 / 응답 (길이를 포함한 문자열) |
+| `Common/Network/EchoReq.cs` · `EchoRes.cs` · `ChatReq.cs` · `ChatNtf.cs` | 에코·채팅 요청과 응답 / 알림 |
 | `Common/Network/BAWriter.cs` · `BAReader.cs` | 숫자·문자열을 바이트로 쓰고 읽기 (struct) |
 | `Common/Network/MoveReq.cs` · `MoveNtf.cs` | 이동 요청 / 이동 알림 패킷 |
 | `Common/Network/PlayerEnterNtf.cs` · `PlayerLeaveNtf.cs` | 입장 시 위치 알림 / 퇴장 알림 패킷 |
 | `Common/Network/TServer.cs` | 접속 받기. 세션을 만드는 함수(Func)를 받아서 씀 |
 | `Common/Network/TSession.cs` | 접속 하나를 맡음: 받기·보내기 루프, 멱등 Disconnect와 종료 정리 (abstract) |
 | `Common/Job/JobSerializer.cs` | 일감 줄 (Channel): Push / Flush / RunAsync |
-| `Common/Network/EchoPacket.cs` | 쓰지 않음 (2단계 class/struct 실험용) |
 | `Game/Program.cs` | 방·핸들러·서버를 조립하고 일감 처리·틱 루프 시작 |
-| `Game/Network/GameSession.cs` | TSession의 자식, 상태·패킷 검증과 분배. **`IGameSession` 인터페이스도 이 파일 안에 있음** |
-| `Game/Network/GameHandler.cs` | 패킷 종류별 함수. 방에 Push만 함 |
+| `Game/Network/GameSession.cs` | TSession의 자식, 상태와 연결 생명주기. 패킷은 분배기에 전달. **`IGameSession` 인터페이스도 이 파일 안에 있음** |
+| `Game/Network/GameHandler.cs` | typed 요청을 받아 방에 Push |
+| `Game/Network/PacketDispatcher.cs` · `IPacketHandler.cs` | 소켓과 분리한 패킷 검증·분배 계약 |
 | `Game/Room/Player.cs` | 세션, 틱 확정 위치·예정 위치, 이동 여부와 알려진 상대 집합 저장 |
 | `Game/Room/GameRoom.cs` | Dictionary 명단·셀 인덱스, 틱에서 위치·시야 확정, 근처 상대에게 알림 |
 | `DummyClient/Program.cs` | 이름 입력 후 채팅, `/move x y`로 이동 |
@@ -152,12 +153,9 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 
 ### 묶음 C. 구조 다듬기
 
-#### 15. 패킷 형식 통일과 분배기 분리
-- **목표:** 모든 패킷을 BAWriter/BAReader 방식으로 바꾸고, `GameSession.OnPacket`의 switch를 별도 클래스(분배기)로 뺀다.
-- **왜:** 지금은 문자열 방식과 BAWriter 방식이 섞여 있다. 또 switch가 GameSession 안에 있어서 소켓 없이는 분배를 테스트할 수 없다.
-- **범위:** 넣을 것은 Login/Chat 등의 패킷 클래스, PacketBuilder 삭제, 분배기 클래스와 그 테스트. 뺄 것은 자동 생성(16).
-- **완료 기준:** `PacketBuilder`를 쓰는 곳이 0곳. "바이트를 넣으면 맞는 핸들러 함수가 불린다"는 분배기 테스트가 통과한다.
-- **상태:** 예정
+| 완료한 단계 | 만든 것 | 처음 배운 C# |
+|---|---|---|
+| 15. 패킷 형식 통일과 분배기 분리 | 모든 패킷을 BAWriter/BAReader로 통일, 독립 typed 분배기, PacketBuilder·EchoPacket 삭제 | 인터페이스 기본 구현, 엄격한 UTF-8·본문 전체 소비 |
 
 #### 16. 패킷 코드 자동 생성
 - **목표:** 정의 파일에 패킷 이름과 필드 목록만 적으면 패킷 클래스와 분배기 코드가 만들어진다.
@@ -208,14 +206,12 @@ DummyClient ──TCP──► TSession 받기 루프 (RunAsync, 네트워크 �
 
 | 내용 | 다룰 단계 |
 |---|---|
-| `Common/Network/EchoPacket.cs`는 쓰지 않는다. 지워도 된다 | 아무 때나 |
 | Echo 패킷은 서버 처리와 테스트에만 있고, 클라는 더 이상 보내지 않는다 | 15 |
 | `Login` 프로젝트는 템플릿(Hello World) 그대로다 | 18 |
 | `Name`이 세션(연결 객체)에 있다. 게임 상태이니 `Player`로 옮길 후보다 | 11 이후 |
 | 보내기 줄(`Channel.CreateUnbounded`)에 크기 제한이 없다 | 20 |
 | 서버를 정상적으로 끄는 처리가 없다 (Ctrl+C로 끔) | 20 |
 | 클라는 서버가 먼저 꺼져도 알아채지 못한다. 그 뒤 입력을 보내면 예외로 종료될 수 있다 | 20 |
-| 패킷 형식이 두 가지 섞여 있다 (문자열 / BAWriter) | 15 |
 
 ---
 
@@ -250,3 +246,4 @@ cd E:/MyServer && dotnet run --project DummyClient
 - 2026-10-28: 12단계 완료 (입장·퇴장 알림). 빌드 경고·오류 0개, 테스트 15개 통과. 실행 확인: 복사본(17777)의 실제 DummyClient 2개로 Kim 이동 후 Lee 입장 시 Kim의 (3.5, 7) 위치 수신, Lee 종료 시 Kim의 퇴장 알림 수신 확인. 확인용 서버·클라 종료.
 - 2026-10-28: 13단계 완료 (세션 상태와 방어). 빌드 경고·오류 0개, 테스트 60개 통과. 실행 확인: 복사본(17777)에서 정상 Login+Chat 일괄 수신 허용, 로그인 전 채팅·미정의 번호·잘린 이동의 연결 종료, 맵 밖 이동 거절 후 Echo 연결 유지 확인. 검증 서버 종료.
 - 2026-10-28: 14단계 완료 (시야 (가까운 사람에게만 보내기)). 빌드 경고·오류 0개, 테스트 72개 통과. 실행 확인: 복사본(17777) 3클라로 먼 상대의 이동·채팅 0개, 시야 이탈·재접근의 양방향 퇴장·입장, 입장과 이동 중복 0개, 종료 시 퇴장 확인. 검증 서버 종료.
+- 2026-10-28: 15단계 완료 (패킷 형식 통일과 분배기 분리). 빌드 경고·오류 0개, 테스트 106개 통과. 실행 확인: 복사본(17777)의 실제 DummyClient 2개로 새 패킷 형식의 로그인·입퇴장·한글 채팅·이동 확인, EchoReq/Res 왕복 확인. 클라 정상 종료, 검증 서버 종료.

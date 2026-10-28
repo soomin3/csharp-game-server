@@ -75,13 +75,17 @@ namespace Common.Network
             }
         }
 
-        public void Disconnect()
+        public void Disconnect(string? reason = null)
         {
             if (Interlocked.Exchange(ref _disconnected, 1) != 0)
             {
                 return;
             }
 
+            if (reason != null)
+            {
+                Console.WriteLine($"[TSession] {reason} — 연결을 끊습니다.");
+            }
             _sendChannel.Writer.TryComplete();
             _client.Close();
         }

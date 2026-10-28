@@ -1,0 +1,74 @@
+using Common.Network;
+
+namespace Game.Network
+{
+    public sealed class PacketDispatcher
+    {
+        private readonly IPacketHandler _handler;
+
+        public PacketDispatcher(IPacketHandler handler)
+        {
+            ArgumentNullException.ThrowIfNull(handler);
+            _handler = handler;
+        }
+
+        public bool Dispatch(IGameSession session, PacketId id, byte[] buffer, int offset, int length)
+        {
+            if (session.IsDisconnected)
+            {
+                return false;
+            }
+
+            switch (id)
+            {
+                case PacketId.Echo:
+                {
+                    EchoReq? packet = EchoReq.ToValue(buffer, offset, length);
+                    if (packet is null)
+                    {
+                        session.Disconnect("Malformed packet: EchoReq");
+                        return false;
+                    }
+                    _handler.ResEcho(session, packet);
+                    return true;
+                }
+                case PacketId.Login:
+                {
+                    LoginReq? packet = LoginReq.ToValue(buffer, offset, length);
+                    if (packet is null)
+                    {
+                        session.Disconnect("Malformed packet: LoginReq");
+                        return false;
+                    }
+                    _handler.ResLogin(session, packet);
+                    return true;
+                }
+                case PacketId.Chat:
+                {
+                    ChatReq? packet = ChatReq.ToValue(buffer, offset, length);
+                    if (packet is null)
+                    {
+                        session.Disconnect("Malformed packet: ChatReq");
+                        return false;
+                    }
+                    _handler.ResChat(session, packet);
+                    return true;
+                }
+                case PacketId.MoveReq:
+                {
+                    MoveReq? packet = MoveReq.ToValue(buffer, offset, length);
+                    if (packet is null)
+                    {
+                        session.Disconnect("Malformed packet: MoveReq");
+                        return false;
+                    }
+                    _handler.ResMove(session, packet);
+                    return true;
+                }
+                default:
+                    session.Disconnect($"Unknown packet ID: {(ushort)id}");
+                    return false;
+            }
+        }
+    }
+}

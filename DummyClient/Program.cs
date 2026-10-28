@@ -1,5 +1,4 @@
 ﻿using System.Net.Sockets;
-using System.Text;
 using Common.Network;
 
 TcpClient client = new TcpClient();
@@ -20,7 +19,7 @@ if (string.IsNullOrEmpty(name))
 {
     name = "손님";
 }
-await stream.WriteAsync(PacketBuilder.Build(PacketId.Login, name));
+await stream.WriteAsync(new LoginReq { Name = name }.ToPacket());
 
 Console.WriteLine("채팅을 입력하세요. 이동은 /move x y (예: /move 3.5 7). 빈 줄을 입력하면 종료합니다.");
 while (true)
@@ -47,7 +46,7 @@ while (true)
         continue;
     }
 
-    await stream.WriteAsync(PacketBuilder.Build(PacketId.Chat, line));
+    await stream.WriteAsync(new ChatReq { Message = line }.ToPacket());
 }
 
 client.Close();
@@ -71,11 +70,32 @@ void OnPacket(PacketId id, byte[] buffer, int offset, int length)
     switch (id)
     {
         case PacketId.Login:
-            Console.WriteLine($"[DummyClient] 로그인 응답: {Encoding.UTF8.GetString(buffer, offset, length)}");
+        {
+            LoginRes? response = LoginRes.ToValue(buffer, offset, length);
+            if (response != null)
+            {
+                Console.WriteLine($"[DummyClient] 로그인 응답: {response.Message}");
+            }
             break;
+        }
+        case PacketId.Echo:
+        {
+            EchoRes? response = EchoRes.ToValue(buffer, offset, length);
+            if (response != null)
+            {
+                Console.WriteLine($"[에코] {response.Message}");
+            }
+            break;
+        }
         case PacketId.Chat:
-            Console.WriteLine($"[채팅] {Encoding.UTF8.GetString(buffer, offset, length)}");
+        {
+            ChatNtf? notification = ChatNtf.ToValue(buffer, offset, length);
+            if (notification != null)
+            {
+                Console.WriteLine($"[채팅] {notification.Message}");
+            }
             break;
+        }
         case PacketId.MoveNtf:
         {
             MoveNtf? ntf = MoveNtf.ToValue(buffer, offset, length);

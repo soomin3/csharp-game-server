@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Common.Network;
+﻿using Common.Network;
 using Game.Network;
 using Game.Room;
 
@@ -237,6 +236,12 @@ namespace Game.Tests
 
         private static PacketId IdOf(byte[] packet) => (PacketId)BitConverter.ToUInt16(packet, PacketHeader.LengthSize);
 
-        private static string TextOf(byte[] packet) => Encoding.UTF8.GetString(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+        private static string TextOf(byte[] packet)
+        {
+            BAReader reader = new BAReader(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+            string text = reader.GetString();
+            Assert.True(reader.IsComplete);
+            return text;
+        }
     }
 }

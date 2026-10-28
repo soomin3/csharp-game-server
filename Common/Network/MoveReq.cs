@@ -15,16 +15,11 @@
 
         public static MoveReq? ToValue(byte[] buffer, int offset, int length)
         {
-            if (length != sizeof(float) * 2 || offset < 0 || offset > buffer.Length - length)
-            {
-                return null;
-            }
-
             BAReader reader = new BAReader(buffer, offset, length);
             MoveReq req = new MoveReq();
             req.X = reader.GetFloat();
             req.Y = reader.GetFloat();
-            if (!reader.IsValid)
+            if (!reader.IsComplete)
             {
                 return null;
             }
