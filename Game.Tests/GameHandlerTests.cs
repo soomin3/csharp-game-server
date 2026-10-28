@@ -53,11 +53,10 @@ namespace Game.Tests
             handler.ResChat(kim, "hi");
             room.Flush();
 
-            Assert.Equal(2, kim.SentPackets.Count);
-            Assert.Equal(PacketId.Chat, IdOf(kim.SentPackets[1]));
-            Assert.Equal("Kim: hi", TextOf(kim.SentPackets[1]));
-            Assert.Equal(2, lee.SentPackets.Count);
-            Assert.Equal("Kim: hi", TextOf(lee.SentPackets[1]));
+            byte[] kimChat = Assert.Single(kim.SentPackets.Where(packet => IdOf(packet) == PacketId.Chat));
+            byte[] leeChat = Assert.Single(lee.SentPackets.Where(packet => IdOf(packet) == PacketId.Chat));
+            Assert.Equal("Kim: hi", TextOf(kimChat));
+            Assert.Equal("Kim: hi", TextOf(leeChat));
         }
 
         [Fact]
@@ -69,13 +68,15 @@ namespace Game.Tests
             FakeGameSession lee = new FakeGameSession();
             handler.ResLogin(kim, "Kim");
             handler.ResLogin(lee, "Lee");
+            room.Flush();
+            int leePacketCount = lee.SentPackets.Count;
 
             handler.OnDisconnect(lee);
             handler.ResChat(kim, "hi");
             room.Flush();
 
-            Assert.Equal(2, kim.SentPackets.Count);
-            Assert.Single(lee.SentPackets);
+            Assert.Single(kim.SentPackets.Where(packet => IdOf(packet) == PacketId.Chat));
+            Assert.Equal(leePacketCount, lee.SentPackets.Count);
         }
 
         [Fact]
@@ -92,7 +93,7 @@ namespace Game.Tests
             room.Flush();
             room.Tick();
 
-            byte[] packet = lee.SentPackets[1];
+            byte[] packet = Assert.Single(lee.SentPackets.Where(packet => IdOf(packet) == PacketId.MoveNtf));
             Assert.Equal(PacketId.MoveNtf, IdOf(packet));
             MoveNtf? ntf = MoveNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
             Assert.NotNull(ntf);
@@ -125,21 +126,23 @@ namespace Game.Tests
             FakeGameSession lee = new FakeGameSession();
             handler.ResLogin(kim, "Kim");
             handler.ResLogin(lee, "Lee");
+            room.Flush();
+            kim.SentPackets.Clear();
+            lee.SentPackets.Clear();
 
             handler.ResMove(kim, new MoveReq { X = 1f, Y = 1f });
             handler.ResMove(kim, new MoveReq { X = 2f, Y = 2f });
             handler.ResMove(kim, new MoveReq { X = 3f, Y = 3f });
             room.Flush();
 
-            Assert.Single(kim.SentPackets);
-            Assert.Single(lee.SentPackets);
+            Assert.Empty(kim.SentPackets);
+            Assert.Empty(lee.SentPackets);
 
             room.Tick();
 
             foreach (FakeGameSession session in new[] { kim, lee })
             {
-                Assert.Equal(2, session.SentPackets.Count);
-                byte[] packet = session.SentPackets[1];
+                byte[] packet = Assert.Single(session.SentPackets);
                 Assert.Equal(PacketId.MoveNtf, IdOf(packet));
                 MoveNtf? ntf = MoveNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
                 Assert.NotNull(ntf);
@@ -150,8 +153,84 @@ namespace Game.Tests
 
             room.Tick();
 
-            Assert.Equal(2, kim.SentPackets.Count);
-            Assert.Equal(2, lee.SentPackets.Count);
+            Assert.Single(kim.SentPackets);
+            Assert.Single(lee.SentPackets);
+        }
+
+        [Fact]
+        public void 늦게_입장하면_기존_플레이어의_현재_위치를_받는다()
+        {
+            GameRoom room = new GameRoom();
+            GameHandler handler = new GameHandler(room);
+            FakeGameSession kim = new FakeGameSession();
+            FakeGameSession lee = new FakeGameSession();
+            handler.ResLogin(kim, "Kim");
+            handler.ResMove(kim, new MoveReq { X = 3.5f, Y = 7f });
+            room.Flush();
+            room.Tick();
+
+            handler.ResLogin(lee, "Lee");
+            room.Flush();
+
+            byte[] packet = Assert.Single(lee.SentPackets.Where(value => IdOf(value) == PacketId.PlayerEnterNtf));
+            PlayerEnterNtf? ntf = PlayerEnterNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+            Assert.NotNull(ntf);
+            Assert.Equal("Kim", ntf.Name);
+            Assert.Equal(3.5f, ntf.X);
+            Assert.Equal(7f, ntf.Y);
+        }
+
+        [Fact]
+        public void 새로_입장한_플레이어를_기존_플레이어에게_알린다()
+        {
+            GameRoom room = new GameRoom();
+            GameHandler handler = new GameHandler(room);
+            FakeGameSession kim = new FakeGameSession();
+            FakeGameSession lee = new FakeGameSession();
+            handler.ResLogin(kim, "Kim");
+            room.Flush();
+            kim.SentPackets.Clear();
+
+            handler.ResLogin(lee, "Lee");
+            room.Flush();
+
+            byte[] packet = Assert.Single(kim.SentPackets);
+            Assert.Equal(PacketId.PlayerEnterNtf, IdOf(packet));
+            PlayerEnterNtf? ntf = PlayerEnterNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+            Assert.NotNull(ntf);
+            Assert.Equal("Lee", ntf.Name);
+            Assert.Equal(0f, ntf.X);
+            Assert.Equal(0f, ntf.Y);
+        }
+
+        [Fact]
+        public void 퇴장하면_남은_플레이어에게_한_번_알린다()
+        {
+            GameRoom room = new GameRoom();
+            GameHandler handler = new GameHandler(room);
+            FakeGameSession kim = new FakeGameSession();
+            FakeGameSession lee = new FakeGameSession();
+            handler.ResLogin(kim, "Kim");
+            handler.ResLogin(lee, "Lee");
+            room.Flush();
+            kim.SentPackets.Clear();
+            lee.SentPackets.Clear();
+
+            handler.OnDisconnect(lee);
+            room.Flush();
+
+            Assert.Equal(1, room.SessionCount);
+            byte[] packet = Assert.Single(kim.SentPackets);
+            Assert.Equal(PacketId.PlayerLeaveNtf, IdOf(packet));
+            PlayerLeaveNtf? ntf = PlayerLeaveNtf.ToValue(packet, PacketHeader.Size, packet.Length - PacketHeader.Size);
+            Assert.NotNull(ntf);
+            Assert.Equal("Lee", ntf.Name);
+            Assert.Empty(lee.SentPackets);
+
+            handler.OnDisconnect(lee);
+            room.Flush();
+
+            Assert.Single(kim.SentPackets);
         }
 
         private static PacketId IdOf(byte[] packet) => (PacketId)BitConverter.ToUInt16(packet, PacketHeader.LengthSize);

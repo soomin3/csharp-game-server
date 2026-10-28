@@ -86,5 +86,25 @@ void OnPacket(PacketId id, byte[] buffer, int offset, int length)
 
             break;
         }
+        case PacketId.PlayerEnterNtf:
+        {
+            PlayerEnterNtf? ntf = PlayerEnterNtf.ToValue(buffer, offset, length);
+            if (ntf != null)
+            {
+                Console.WriteLine($"[입장] {ntf.Name} → ({ntf.X}, {ntf.Y})");
+            }
+
+            break;
+        }
+        case PacketId.PlayerLeaveNtf:
+        {
+            PlayerLeaveNtf? ntf = PlayerLeaveNtf.ToValue(buffer, offset, length);
+            if (ntf != null)
+            {
+                Console.WriteLine($"[퇴장] {ntf.Name}");
+            }
+
+            break;
+        }
     }
 }

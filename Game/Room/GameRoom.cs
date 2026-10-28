@@ -45,9 +45,22 @@ namespace Game.Room
         public void HandleLogin(IGameSession session, string name)
         {
             session.Name = name;
-            _players[session] = new Player(session);
+            Player player = new Player(session);
+            _players[session] = player;
             Console.WriteLine($"[GameRoom] 로그인: {name} (접속 {_players.Count}명)");
             session.SendPacket(PacketBuilder.Build(PacketId.Login, $"환영합니다, {name}님"));
+
+            byte[] enterPacket = new PlayerEnterNtf { Name = name, X = player.X, Y = player.Y }.ToPacket();
+            foreach (Player other in _players.Values)
+            {
+                if (other.Session == session)
+                {
+                    continue;
+                }
+
+                session.SendPacket(new PlayerEnterNtf { Name = other.Session.Name, X = other.X, Y = other.Y }.ToPacket());
+                other.Session.SendPacket(enterPacket);
+            }
         }
 
         public void HandleEcho(IGameSession session, string message)
@@ -87,8 +100,17 @@ namespace Game.Room
 
         public void HandleLeave(IGameSession session)
         {
-            _players.Remove(session);
+            if (!_players.Remove(session))
+            {
+                return;
+            }
+
             Console.WriteLine($"[GameRoom] 퇴장: {session.Name} (접속 {_players.Count}명)");
+            byte[] packet = new PlayerLeaveNtf { Name = session.Name }.ToPacket();
+            foreach (IGameSession other in _players.Keys)
+            {
+                other.SendPacket(packet);
+            }
         }
 
         private static bool IsInMap(float value) => value >= 0 && value <= MapSize;

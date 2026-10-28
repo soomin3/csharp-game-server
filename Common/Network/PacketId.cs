@@ -8,5 +8,7 @@
         Chat = 3,
         MoveReq = 4,
         MoveNtf = 5,
+        PlayerEnterNtf = 6,
+        PlayerLeaveNtf = 7,
     }
 }
