@@ -21,6 +21,11 @@ namespace Game.Room
         private readonly Dictionary<(int X, int Y), HashSet<Player>> _cells =
             new Dictionary<(int X, int Y), HashSet<Player>>();
 
+        // 틱마다 쓰는 컬렉션은 방이 소유하고 재사용한다. 방 일감은 한 번에 하나만 실행되므로 공유해도 안전하다.
+        private readonly Dictionary<Player, byte[]> _movePackets = new Dictionary<Player, byte[]>();
+        private readonly Dictionary<Player, byte[]> _enterPackets = new Dictionary<Player, byte[]>();
+        private HashSet<Player> _visibleScratch = new HashSet<Player>();
+
         public int SessionCount => _players.Count;
         public TickMetrics? Metrics { get; set; }
         public int RoomId { get; }
@@ -62,7 +67,21 @@ namespace Game.Room
 
         private void TickCore()
         {
-            Dictionary<Player, byte[]> movePackets = new Dictionary<Player, byte[]>();
+            try
+            {
+                TickPlayers();
+            }
+            finally
+            {
+                // 다음 틱까지 패킷 배열을 붙잡아 두지 않는다.
+                _movePackets.Clear();
+                _enterPackets.Clear();
+            }
+        }
+
+        private void TickPlayers()
+        {
+            Dictionary<Player, byte[]> movePackets = _movePackets;
             foreach (Player player in _players.Values)
             {
                 if (!player.Moved || HasDisconnected(player.Session))
@@ -91,7 +110,8 @@ namespace Game.Room
                     continue;
                 }
 
-                HashSet<Player> visible = FindNearbyPlayers(observer);
+                HashSet<Player> visible = _visibleScratch;
+                FindNearbyPlayers(observer, visible);
                 foreach (Player previous in observer.KnownPlayers)
                 {
                     if (!visible.Contains(previous))
@@ -104,7 +124,7 @@ namespace Game.Room
                 {
                     if (!observer.KnownPlayers.Contains(other))
                     {
-                        observer.Session.SendPacket(EnterPacket(other));
+                        observer.Session.SendPacket(CachedEnterPacket(other));
                     }
                     else if (movePackets.TryGetValue(other, out byte[]? packet))
                     {
@@ -117,8 +137,8 @@ namespace Game.Room
                     observer.Session.SendPacket(ownPacket);
                 }
 
-                observer.KnownPlayers.Clear();
-                observer.KnownPlayers.UnionWith(visible);
+                // 복사 대신 집합을 맞바꾸고, 이전 시야 집합을 다음 관찰자의 계산에 쓴다.
+                _visibleScratch = observer.SwapKnownPlayers(visible);
             }
 
             foreach (Player player in _players.Values)
@@ -177,7 +197,9 @@ namespace Game.Room
         private void AnnounceEntry(Player player)
         {
             byte[] enterPacket = EnterPacket(player);
-            foreach (Player other in FindNearbyPlayers(player))
+            HashSet<Player> nearby = _visibleScratch;
+            FindNearbyPlayers(player, nearby);
+            foreach (Player other in nearby)
             {
                 player.KnownPlayers.Add(other);
                 other.KnownPlayers.Add(player);
@@ -222,8 +244,11 @@ namespace Game.Room
             }
 
             Player player = _players[session];
-            int recipientCount = 1 + player.KnownPlayers.Count(other => !HasDisconnected(other.Session));
-            if (GameLog.Verbose) Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
+            if (GameLog.Verbose)
+            {
+                int recipientCount = 1 + player.KnownPlayers.Count(other => !HasDisconnected(other.Session));
+                Console.WriteLine($"[GameRoom] 채팅: {session.Name} → '{message}' ({recipientCount}명에게)");
+            }
             byte[] packet = new ChatNtf { Message = $"{session.Name}: {message}" }.ToPacket();
             session.SendPacket(packet);
             foreach (Player other in player.KnownPlayers)
@@ -367,9 +392,10 @@ namespace Game.Room
             }
         }
 
-        private HashSet<Player> FindNearbyPlayers(Player observer)
+        // 호출자가 준 집합을 비우고 채운다. 이전 호출이 예외로 끝나 남은 항목도 여기서 지운다.
+        private void FindNearbyPlayers(Player observer, HashSet<Player> visible)
         {
-            HashSet<Player> visible = new HashSet<Player>();
+            visible.Clear();
             (int X, int Y) cell = CellOf(observer);
             for (int x = Math.Max(0, cell.X - 1); x <= Math.Min(CellCount - 1, cell.X + 1); x++)
             {
@@ -389,12 +415,21 @@ namespace Game.Room
                     }
                 }
             }
-
-            return visible;
         }
 
         private static byte[] EnterPacket(Player player) =>
             new PlayerEnterNtf { Name = player.Session.Name, X = player.X, Y = player.Y }.ToPacket();
+
+        // 틱 안에서는 위치가 바뀌지 않으므로, 여러 관찰자에게 새로 보인 플레이어의 입장 패킷은 한 번만 만든다.
+        private byte[] CachedEnterPacket(Player player)
+        {
+            if (!_enterPackets.TryGetValue(player, out byte[]? packet))
+            {
+                packet = EnterPacket(player);
+                _enterPackets[player] = packet;
+            }
+            return packet;
+        }
 
         private static bool IsInMap(float value) => value >= 0 && value <= MapSize;
 

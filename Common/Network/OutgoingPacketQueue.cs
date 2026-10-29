@@ -24,9 +24,9 @@ namespace Common.Network
         public OutgoingPacketQueue(SessionOptions? options = null)
         {
             _options = options ?? new SessionOptions();
-            if (_options.MaxPendingPackets <= 0 || _options.MaxPendingBytes <= 0)
+            if (_options.MaxPendingPackets <= 0 || _options.MaxPendingBytes <= 0 || _options.SendBatchBytes <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(options), "송신 대기 패킷 수와 바이트 한도는 양수여야 합니다.");
+                throw new ArgumentOutOfRangeException(nameof(options), "송신 대기 패킷 수, 바이트 한도와 묶음 크기는 양수여야 합니다.");
             }
 
             _channel = Channel.CreateBounded<OutgoingPacket>(new BoundedChannelOptions(_options.MaxPendingPackets)
@@ -76,6 +76,13 @@ namespace Common.Network
 
         public IAsyncEnumerable<OutgoingPacket> ReadAllAsync(CancellationToken cancellationToken = default) =>
             _channel.Reader.ReadAllAsync(cancellationToken);
+
+        // 묶음 송신용이다. 대기 항목이 생기거나 완료될 때까지 기다리고, 꺼낸 항목은 쓰기 후 Dispose해야 한다.
+        public ValueTask<bool> WaitToReadAsync(CancellationToken cancellationToken = default) =>
+            _channel.Reader.WaitToReadAsync(cancellationToken);
+
+        public bool TryRead([System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out OutgoingPacket packet) =>
+            _channel.Reader.TryRead(out packet);
 
         // 새 입력을 막고, 이미 들어온 항목은 소비자가 끝까지 읽게 한다.
         public void Complete()

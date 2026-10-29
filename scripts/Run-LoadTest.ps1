@@ -295,7 +295,46 @@ try {
     $packetsSent = Get-BenchmarkNumber $traffic 'packetsSent'
     $bytesSent = Get-BenchmarkNumber $traffic 'bytesSent'
     Add-BenchmarkCondition $conditions 'serverTrafficPresent' ($packetsSent -gt 0 -and $bytesSent -gt 0) $traffic '> 0'
-    $taskReport.window = [ordered]@{ startUtcMilliseconds=$start; endUtcMilliseconds=$end; durationSeconds=($end-$start)/1000.0; minimumTicksPerRoom=$minimumTicks; percentile='nearest-rank'; overall=$overall; rooms=$roomStatistics; samples=$samples }
+    # 런타임 표본은 누적값이므로 측정 구간 안의 첫 표본과 마지막 표본의 차이를 사용한다.
+    $runtime = Get-BenchmarkValue $server 'runtime'
+    $runtimeSelected = [System.Collections.Generic.List[object]]::new()
+    $runtimeSamples = Get-BenchmarkValue $runtime 'samples'
+    if ($null -ne $runtimeSamples) {
+        foreach ($sample in $runtimeSamples) {
+            $time = Get-BenchmarkNumber $sample 'timestampUtcMilliseconds'
+            if ($time -ge $start -and $time -lt $end) { $runtimeSelected.Add($sample) }
+        }
+    }
+    $runtimeWindow = $runtimeSelected.ToArray()
+    Add-BenchmarkCondition $conditions 'runtimeSamplesPresent' ($runtimeWindow.Count -ge 2) $runtimeWindow.Count '>= 2'
+    $runtimeSummary = $null
+    if ($runtimeWindow.Count -ge 2) {
+        $first = $runtimeWindow[0]
+        $last = $runtimeWindow[-1]
+        $seconds = ($last.timestampUtcMilliseconds - $first.timestampUtcMilliseconds) / 1000.0
+        $allocated = $last.allocatedBytes - $first.allocatedBytes
+        $packets = $last.packetsSent - $first.packetsSent
+        $writes = $last.socketWrites - $first.socketWrites
+        $cpu = $last.cpuMilliseconds - $first.cpuMilliseconds
+        $runtimeSummary = [ordered]@{
+            gcServer = Get-BenchmarkValue $runtime 'gcServer'
+            sampleCount = $runtimeWindow.Count
+            seconds = $seconds
+            allocatedBytes = $allocated
+            allocatedMegabytesPerSecond = $allocated / 1MB / $seconds
+            allocatedBytesPerPacket = if ($packets -gt 0) { $allocated / $packets } else { $null }
+            gen0Collections = $last.gen0Collections - $first.gen0Collections
+            gen1Collections = $last.gen1Collections - $first.gen1Collections
+            gen2Collections = $last.gen2Collections - $first.gen2Collections
+            cpuMilliseconds = $cpu
+            cpuPercentOfOneCore = $cpu / ($seconds * 1000) * 100
+            packetsSent = $packets
+            bytesSent = $last.bytesSent - $first.bytesSent
+            socketWrites = $writes
+            packetsPerSocketWrite = if ($writes -gt 0) { $packets / $writes } else { $null }
+        }
+    }
+    $taskReport.window = [ordered]@{ startUtcMilliseconds=$start; endUtcMilliseconds=$end; durationSeconds=($end-$start)/1000.0; minimumTicksPerRoom=$minimumTicks; percentile='nearest-rank'; overall=$overall; runtime=$runtimeSummary; rooms=$roomStatistics; samples=$samples }
     $taskReport.server = [ordered]@{ environment=$environment; lifetimeTraffic=$traffic; totalRecorded=(Get-BenchmarkNumber $metrics 'totalRecorded'); retainedCount=(Get-BenchmarkNumber $metrics 'retainedCount'); droppedCount=$dropped; activeSessions=(Get-BenchmarkNumber $server 'activeSessions'); pendingJobs=(Get-BenchmarkNumber $server 'pendingJobs'); pendingPersistence=(Get-BenchmarkNumber $server 'pendingPersistence'); sessionErrors=(Get-BenchmarkNumber $server 'sessionErrors'); jobErrors=(Get-BenchmarkNumber $server 'jobErrors'); shutdownErrors=$shutdownErrors }
     $taskReport.conditions = $conditions.ToArray()
     $taskReport.success = @($conditions | Where-Object { -not $_.passed }).Count -eq 0

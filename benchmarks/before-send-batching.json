@@ -1,0 +1,4616 @@
+{
+  "success": true,
+  "passed": true,
+  "phase": "complete",
+  "startedUtc": "2026-10-29T13:45:27.7546948+00:00",
+  "baseCommit": "a365e41976a98815c6095953ecfda841af235d38",
+  "worktreeDirty": true,
+  "configuration": {
+    "clients": 500,
+    "durationSeconds": 10,
+    "warmupSeconds": 2,
+    "intervalMilliseconds": 100,
+    "rooms": 3,
+    "workers": 2,
+    "port": 17777,
+    "loginPort": 15000,
+    "seed": 42,
+    "quiet": true,
+    "configuration": "Release"
+  },
+  "artifacts": {
+    "runDirectory": "artifacts\\run-e443a96bea97443f8500f5b99d134305",
+    "serverResult": "artifacts\\run-e443a96bea97443f8500f5b99d134305\\server.json",
+    "clientResult": "artifacts\\run-e443a96bea97443f8500f5b99d134305\\client.json"
+  },
+  "conditions": [
+    {
+      "name": "loadExitZero",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "demoExitZero",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "clientSuccess",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "requestedClients",
+      "passed": true,
+      "actual": 500.0,
+      "expected": 500
+    },
+    {
+      "name": "healthyAtStart",
+      "passed": true,
+      "actual": 500.0,
+      "expected": 500
+    },
+    {
+      "name": "healthyAtEnd",
+      "passed": true,
+      "actual": 500.0,
+      "expected": 500
+    },
+    {
+      "name": "clientsWithMeasuredMoves",
+      "passed": true,
+      "actual": 500.0,
+      "expected": 500
+    },
+    {
+      "name": "clientsWithConfirmedMoves",
+      "passed": true,
+      "actual": 500.0,
+      "expected": 500
+    },
+    {
+      "name": "clientErrorsZero",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "client.movesSent",
+      "passed": true,
+      "actual": 50000.0,
+      "expected": "> 0"
+    },
+    {
+      "name": "client.movesConfirmed",
+      "passed": true,
+      "actual": 49986.0,
+      "expected": "> 0"
+    },
+    {
+      "name": "client.packetsSent",
+      "passed": true,
+      "actual": 50000.0,
+      "expected": "> 0"
+    },
+    {
+      "name": "client.packetsReceived",
+      "passed": true,
+      "actual": 824943.0,
+      "expected": "> 0"
+    },
+    {
+      "name": "client.bytesReceived",
+      "passed": true,
+      "actual": 26237030.0,
+      "expected": "> 0"
+    },
+    {
+      "name": "retainedSampleCountMatches",
+      "passed": true,
+      "actual": 4620.0,
+      "expected": 4620
+    },
+    {
+      "name": "retentionAccountingMatches",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "name": "measurementDuration",
+      "passed": true,
+      "actual": 10.005,
+      "expected": ">= 8 seconds"
+    },
+    {
+      "name": "noDroppedTickSamples",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "samplesPresent",
+      "passed": true,
+      "actual": 600,
+      "expected": "> 0"
+    },
+    {
+      "name": "onlyConfiguredRooms",
+      "passed": true,
+      "actual": [
+        2,
+        1,
+        3
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "tickBudget",
+      "passed": true,
+      "actual": 11.072,
+      "expected": "<= 50ms"
+    },
+    {
+      "name": "room.1.tickCount",
+      "passed": true,
+      "actual": 200,
+      "expected": 160
+    },
+    {
+      "name": "room.1.tickBudget",
+      "passed": true,
+      "actual": 11.072,
+      "expected": "<= 50ms with samples"
+    },
+    {
+      "name": "room.1.players",
+      "passed": true,
+      "actual": 167,
+      "expected": 167
+    },
+    {
+      "name": "room.2.tickCount",
+      "passed": true,
+      "actual": 200,
+      "expected": 160
+    },
+    {
+      "name": "room.2.tickBudget",
+      "passed": true,
+      "actual": 9.3821,
+      "expected": "<= 50ms with samples"
+    },
+    {
+      "name": "room.2.players",
+      "passed": true,
+      "actual": 167,
+      "expected": 167
+    },
+    {
+      "name": "room.3.tickCount",
+      "passed": true,
+      "actual": 200,
+      "expected": 160
+    },
+    {
+      "name": "room.3.tickBudget",
+      "passed": true,
+      "actual": 9.2421,
+      "expected": "<= 50ms with samples"
+    },
+    {
+      "name": "room.3.players",
+      "passed": true,
+      "actual": 166,
+      "expected": 166
+    },
+    {
+      "name": "server.activeSessions",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "server.pendingJobs",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "server.pendingPersistence",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "server.sessionErrors",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "server.jobErrors",
+      "passed": true,
+      "actual": 0.0,
+      "expected": 0
+    },
+    {
+      "name": "shutdownErrorsZero",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "environmentPresent",
+      "passed": true,
+      "actual": {
+        "framework": ".NET 8.0.31",
+        "os": "Microsoft Windows 10.0.26200",
+        "processorCount": 16,
+        "assemblyMvid": "9764454a-80f1-4aeb-a224-0d4f7b2a6fae"
+      },
+      "expected": "framework/os/processorCount/assemblyMvid"
+    },
+    {
+      "name": "serverTrafficPresent",
+      "passed": true,
+      "actual": {
+        "packetsSent": 1090727,
+        "bytesSent": 34464390,
+        "socketWrites": 1090727
+      },
+      "expected": "> 0"
+    },
+    {
+      "name": "runtimeSamplesPresent",
+      "passed": true,
+      "actual": 100,
+      "expected": ">= 2"
+    }
+  ],
+  "client": {
+    "success": true,
+    "requestedClients": 500,
+    "healthyAtStart": 500,
+    "healthyAtEnd": 500,
+    "clientsWithMeasuredMoves": 500,
+    "clientsWithConfirmedMoves": 500,
+    "errorCount": 0,
+    "measurementStartUtc": "2026-10-29T22:45:32.224677+09:00",
+    "measurementEndUtc": "2026-10-29T22:45:42.2298522+09:00",
+    "durationSeconds": 10.0051752,
+    "intervalMs": 100,
+    "rooms": 3,
+    "seed": 42,
+    "packetsReceived": 824943,
+    "bytesReceived": 26237030,
+    "packetsSent": 50000,
+    "movesSent": 50000,
+    "movesConfirmed": 49986,
+    "failures": []
+  },
+  "window": {
+    "startUtcMilliseconds": 1793281532224,
+    "endUtcMilliseconds": 1793281542229,
+    "durationSeconds": 10.005,
+    "minimumTicksPerRoom": 160,
+    "percentile": "nearest-rank",
+    "overall": {
+      "count": 600,
+      "maxMilliseconds": 11.072,
+      "meanMilliseconds": 0.5764889999999999,
+      "p95Milliseconds": 0.996,
+      "p99Milliseconds": 1.4785,
+      "over50MillisecondsCount": 0,
+      "maxPendingJobs": 209,
+      "maxPlayerCount": 167
+    },
+    "runtime": {
+      "gcServer": false,
+      "sampleCount": 100,
+      "seconds": 9.899,
+      "allocatedBytes": 192350776,
+      "allocatedMegabytesPerSecond": 18.53116424002543,
+      "allocatedBytesPerPacket": 235.60589851410262,
+      "gen0Collections": 4,
+      "gen1Collections": 2,
+      "gen2Collections": 1,
+      "cpuMilliseconds": 22781.25,
+      "cpuPercentOfOneCore": 230.1368825133852,
+      "packetsSent": 816409,
+      "bytesSent": 25964882,
+      "socketWrites": 816409,
+      "packetsPerSocketWrite": 1
+    },
+    "rooms": [
+      {
+        "roomId": 1,
+        "statistics": {
+          "count": 200,
+          "maxMilliseconds": 11.072,
+          "meanMilliseconds": 0.5564775000000002,
+          "p95Milliseconds": 0.8841,
+          "p99Milliseconds": 1.4463,
+          "over50MillisecondsCount": 0,
+          "maxPendingJobs": 156,
+          "maxPlayerCount": 167
+        },
+        "expectedPlayers": 167
+      },
+      {
+        "roomId": 2,
+        "statistics": {
+          "count": 200,
+          "maxMilliseconds": 9.3821,
+          "meanMilliseconds": 0.5842469999999997,
+          "p95Milliseconds": 1.0136,
+          "p99Milliseconds": 1.4785,
+          "over50MillisecondsCount": 0,
+          "maxPendingJobs": 209,
+          "maxPlayerCount": 167
+        },
+        "expectedPlayers": 167
+      },
+      {
+        "roomId": 3,
+        "statistics": {
+          "count": 200,
+          "maxMilliseconds": 9.2421,
+          "meanMilliseconds": 0.5887425000000001,
+          "p95Milliseconds": 1.0249,
+          "p99Milliseconds": 1.3809,
+          "over50MillisecondsCount": 0,
+          "maxPendingJobs": 160,
+          "maxPlayerCount": 166
+        },
+        "expectedPlayers": 166
+      }
+    ],
+    "samples": [
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532270,
+        "elapsedMilliseconds": 0.6062,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532270,
+        "elapsedMilliseconds": 0.6333,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532271,
+        "elapsedMilliseconds": 0.5482,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532315,
+        "elapsedMilliseconds": 0.2869,
+        "playerCount": 166,
+        "pendingJobs": 55
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532315,
+        "elapsedMilliseconds": 0.5087,
+        "playerCount": 167,
+        "pendingJobs": 110
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532316,
+        "elapsedMilliseconds": 0.2925,
+        "playerCount": 167,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532361,
+        "elapsedMilliseconds": 0.5394,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532361,
+        "elapsedMilliseconds": 0.8403,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532362,
+        "elapsedMilliseconds": 0.4968,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532407,
+        "elapsedMilliseconds": 0.203,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532407,
+        "elapsedMilliseconds": 0.354,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532408,
+        "elapsedMilliseconds": 0.1892,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532469,
+        "elapsedMilliseconds": 0.5114,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532469,
+        "elapsedMilliseconds": 0.5509,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532470,
+        "elapsedMilliseconds": 0.5082,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532515,
+        "elapsedMilliseconds": 0.28,
+        "playerCount": 166,
+        "pendingJobs": 41
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532515,
+        "elapsedMilliseconds": 0.3215,
+        "playerCount": 167,
+        "pendingJobs": 38
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532515,
+        "elapsedMilliseconds": 0.2689,
+        "playerCount": 167,
+        "pendingJobs": 74
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532561,
+        "elapsedMilliseconds": 0.5078,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532561,
+        "elapsedMilliseconds": 0.5538,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532562,
+        "elapsedMilliseconds": 0.4921,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532607,
+        "elapsedMilliseconds": 0.2156,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532607,
+        "elapsedMilliseconds": 0.3772,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532608,
+        "elapsedMilliseconds": 0.1883,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532668,
+        "elapsedMilliseconds": 0.5418,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532668,
+        "elapsedMilliseconds": 0.5438,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532669,
+        "elapsedMilliseconds": 0.4827,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532714,
+        "elapsedMilliseconds": 0.3265,
+        "playerCount": 167,
+        "pendingJobs": 81
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532714,
+        "elapsedMilliseconds": 0.638,
+        "playerCount": 166,
+        "pendingJobs": 140
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532714,
+        "elapsedMilliseconds": 0.2973,
+        "playerCount": 167,
+        "pendingJobs": 121
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532759,
+        "elapsedMilliseconds": 0.5063,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532759,
+        "elapsedMilliseconds": 0.8401,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532760,
+        "elapsedMilliseconds": 0.5306,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532820,
+        "elapsedMilliseconds": 0.3019,
+        "playerCount": 167,
+        "pendingJobs": 64
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532820,
+        "elapsedMilliseconds": 0.3148,
+        "playerCount": 166,
+        "pendingJobs": 44
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532820,
+        "elapsedMilliseconds": 0.2713,
+        "playerCount": 167,
+        "pendingJobs": 74
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532866,
+        "elapsedMilliseconds": 0.5739,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532866,
+        "elapsedMilliseconds": 0.6009,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532867,
+        "elapsedMilliseconds": 0.5096,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532912,
+        "elapsedMilliseconds": 0.2912,
+        "playerCount": 167,
+        "pendingJobs": 10
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532912,
+        "elapsedMilliseconds": 0.3094,
+        "playerCount": 166,
+        "pendingJobs": 7
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532913,
+        "elapsedMilliseconds": 0.2792,
+        "playerCount": 167,
+        "pendingJobs": 44
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281532958,
+        "elapsedMilliseconds": 0.4911,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281532958,
+        "elapsedMilliseconds": 0.5544,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281532959,
+        "elapsedMilliseconds": 0.5217,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533019,
+        "elapsedMilliseconds": 0.3404,
+        "playerCount": 166,
+        "pendingJobs": 78
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533019,
+        "elapsedMilliseconds": 0.5293,
+        "playerCount": 167,
+        "pendingJobs": 102
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533020,
+        "elapsedMilliseconds": 0.2964,
+        "playerCount": 167,
+        "pendingJobs": 63
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533065,
+        "elapsedMilliseconds": 0.586,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533065,
+        "elapsedMilliseconds": 0.5988,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533065,
+        "elapsedMilliseconds": 0.5365,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533111,
+        "elapsedMilliseconds": 0.2934,
+        "playerCount": 166,
+        "pendingJobs": 79
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533111,
+        "elapsedMilliseconds": 0.3058,
+        "playerCount": 167,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533111,
+        "elapsedMilliseconds": 0.2797,
+        "playerCount": 167,
+        "pendingJobs": 65
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533156,
+        "elapsedMilliseconds": 0.5661,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533156,
+        "elapsedMilliseconds": 0.9103,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533157,
+        "elapsedMilliseconds": 0.5297,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533219,
+        "elapsedMilliseconds": 0.2899,
+        "playerCount": 167,
+        "pendingJobs": 25
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533219,
+        "elapsedMilliseconds": 0.3066,
+        "playerCount": 166,
+        "pendingJobs": 24
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533219,
+        "elapsedMilliseconds": 0.289,
+        "playerCount": 167,
+        "pendingJobs": 80
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533265,
+        "elapsedMilliseconds": 0.5575,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533265,
+        "elapsedMilliseconds": 0.547,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533265,
+        "elapsedMilliseconds": 0.5345,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533311,
+        "elapsedMilliseconds": 0.3727,
+        "playerCount": 167,
+        "pendingJobs": 52
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533311,
+        "elapsedMilliseconds": 0.6631,
+        "playerCount": 166,
+        "pendingJobs": 118
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533311,
+        "elapsedMilliseconds": 0.2875,
+        "playerCount": 167,
+        "pendingJobs": 112
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533356,
+        "elapsedMilliseconds": 0.7218,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533356,
+        "elapsedMilliseconds": 0.8346,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533357,
+        "elapsedMilliseconds": 0.5294,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533418,
+        "elapsedMilliseconds": 0.4013,
+        "playerCount": 167,
+        "pendingJobs": 50
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533418,
+        "elapsedMilliseconds": 0.4302,
+        "playerCount": 166,
+        "pendingJobs": 37
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533419,
+        "elapsedMilliseconds": 0.3799,
+        "playerCount": 167,
+        "pendingJobs": 50
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533464,
+        "elapsedMilliseconds": 1.0874,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533464,
+        "elapsedMilliseconds": 1.2465,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533465,
+        "elapsedMilliseconds": 0.7562,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533511,
+        "elapsedMilliseconds": 0.2877,
+        "playerCount": 167,
+        "pendingJobs": 45
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533511,
+        "elapsedMilliseconds": 0.3038,
+        "playerCount": 166,
+        "pendingJobs": 30
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533512,
+        "elapsedMilliseconds": 0.2739,
+        "playerCount": 167,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533558,
+        "elapsedMilliseconds": 0.5191,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533558,
+        "elapsedMilliseconds": 0.5291,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533558,
+        "elapsedMilliseconds": 0.5033,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533619,
+        "elapsedMilliseconds": 0.2985,
+        "playerCount": 167,
+        "pendingJobs": 32
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533619,
+        "elapsedMilliseconds": 0.304,
+        "playerCount": 166,
+        "pendingJobs": 24
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533619,
+        "elapsedMilliseconds": 0.2849,
+        "playerCount": 167,
+        "pendingJobs": 59
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533664,
+        "elapsedMilliseconds": 0.7296,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533664,
+        "elapsedMilliseconds": 0.9069,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533665,
+        "elapsedMilliseconds": 0.5049,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533710,
+        "elapsedMilliseconds": 0.2313,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533710,
+        "elapsedMilliseconds": 0.3874,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533710,
+        "elapsedMilliseconds": 0.1938,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533771,
+        "elapsedMilliseconds": 1.1765,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533771,
+        "elapsedMilliseconds": 1.4117,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533772,
+        "elapsedMilliseconds": 1.0301,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533817,
+        "elapsedMilliseconds": 0.5519,
+        "playerCount": 166,
+        "pendingJobs": 101
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533817,
+        "elapsedMilliseconds": 0.619,
+        "playerCount": 167,
+        "pendingJobs": 102
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533818,
+        "elapsedMilliseconds": 0.974,
+        "playerCount": 167,
+        "pendingJobs": 157
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533862,
+        "elapsedMilliseconds": 0.5385,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533862,
+        "elapsedMilliseconds": 0.5523,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533863,
+        "elapsedMilliseconds": 0.5237,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533908,
+        "elapsedMilliseconds": 0.2023,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533908,
+        "elapsedMilliseconds": 0.2414,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533908,
+        "elapsedMilliseconds": 0.1947,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281533969,
+        "elapsedMilliseconds": 0.5302,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281533969,
+        "elapsedMilliseconds": 0.8834,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281533969,
+        "elapsedMilliseconds": 0.5297,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534015,
+        "elapsedMilliseconds": 0.4972,
+        "playerCount": 166,
+        "pendingJobs": 90
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534015,
+        "elapsedMilliseconds": 0.4986,
+        "playerCount": 167,
+        "pendingJobs": 65
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534015,
+        "elapsedMilliseconds": 0.3066,
+        "playerCount": 167,
+        "pendingJobs": 91
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534061,
+        "elapsedMilliseconds": 0.5818,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534061,
+        "elapsedMilliseconds": 0.5895,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534062,
+        "elapsedMilliseconds": 0.5905,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534107,
+        "elapsedMilliseconds": 0.2524,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534107,
+        "elapsedMilliseconds": 0.3976,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534108,
+        "elapsedMilliseconds": 0.2318,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534168,
+        "elapsedMilliseconds": 0.8207,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534168,
+        "elapsedMilliseconds": 1.1405,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534169,
+        "elapsedMilliseconds": 0.6537,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534214,
+        "elapsedMilliseconds": 0.393,
+        "playerCount": 167,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534214,
+        "elapsedMilliseconds": 0.4149,
+        "playerCount": 166,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534215,
+        "elapsedMilliseconds": 0.3551,
+        "playerCount": 167,
+        "pendingJobs": 59
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534260,
+        "elapsedMilliseconds": 0.6582,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534260,
+        "elapsedMilliseconds": 0.7884,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534261,
+        "elapsedMilliseconds": 0.661,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534306,
+        "elapsedMilliseconds": 0.262,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534306,
+        "elapsedMilliseconds": 0.4131,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534307,
+        "elapsedMilliseconds": 0.244,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534367,
+        "elapsedMilliseconds": 0.9893,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534367,
+        "elapsedMilliseconds": 1.1796,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534368,
+        "elapsedMilliseconds": 0.6563,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534412,
+        "elapsedMilliseconds": 0.5034,
+        "playerCount": 167,
+        "pendingJobs": 97
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534412,
+        "elapsedMilliseconds": 0.6255,
+        "playerCount": 166,
+        "pendingJobs": 95
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534413,
+        "elapsedMilliseconds": 0.3272,
+        "playerCount": 167,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534457,
+        "elapsedMilliseconds": 0.6925,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534457,
+        "elapsedMilliseconds": 0.7543,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534458,
+        "elapsedMilliseconds": 0.6398,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534519,
+        "elapsedMilliseconds": 0.3249,
+        "playerCount": 167,
+        "pendingJobs": 71
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534519,
+        "elapsedMilliseconds": 0.3576,
+        "playerCount": 166,
+        "pendingJobs": 49
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534519,
+        "elapsedMilliseconds": 0.3258,
+        "playerCount": 167,
+        "pendingJobs": 66
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534565,
+        "elapsedMilliseconds": 0.6391,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534565,
+        "elapsedMilliseconds": 0.6721,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534566,
+        "elapsedMilliseconds": 0.5873,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534612,
+        "elapsedMilliseconds": 0.352,
+        "playerCount": 166,
+        "pendingJobs": 77
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534612,
+        "elapsedMilliseconds": 0.3658,
+        "playerCount": 167,
+        "pendingJobs": 56
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534612,
+        "elapsedMilliseconds": 0.3412,
+        "playerCount": 167,
+        "pendingJobs": 72
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534657,
+        "elapsedMilliseconds": 9.2421,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534657,
+        "elapsedMilliseconds": 9.3821,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534667,
+        "elapsedMilliseconds": 0.5264,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534719,
+        "elapsedMilliseconds": 0.2916,
+        "playerCount": 166,
+        "pendingJobs": 52
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534719,
+        "elapsedMilliseconds": 0.2977,
+        "playerCount": 167,
+        "pendingJobs": 38
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534719,
+        "elapsedMilliseconds": 0.2773,
+        "playerCount": 167,
+        "pendingJobs": 59
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534765,
+        "elapsedMilliseconds": 0.5787,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534765,
+        "elapsedMilliseconds": 0.5997,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534766,
+        "elapsedMilliseconds": 0.5196,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534811,
+        "elapsedMilliseconds": 0.278,
+        "playerCount": 166,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534811,
+        "elapsedMilliseconds": 0.2763,
+        "playerCount": 167,
+        "pendingJobs": 37
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534811,
+        "elapsedMilliseconds": 0.2658,
+        "playerCount": 167,
+        "pendingJobs": 45
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534871,
+        "elapsedMilliseconds": 0.8314,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534872,
+        "elapsedMilliseconds": 0.5005,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534871,
+        "elapsedMilliseconds": 1.4463,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534917,
+        "elapsedMilliseconds": 0.5718,
+        "playerCount": 166,
+        "pendingJobs": 99
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534917,
+        "elapsedMilliseconds": 0.8653,
+        "playerCount": 167,
+        "pendingJobs": 156
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534918,
+        "elapsedMilliseconds": 0.3715,
+        "playerCount": 167,
+        "pendingJobs": 73
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281534962,
+        "elapsedMilliseconds": 0.5153,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281534962,
+        "elapsedMilliseconds": 0.6723,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281534963,
+        "elapsedMilliseconds": 0.4873,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535008,
+        "elapsedMilliseconds": 0.2392,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535008,
+        "elapsedMilliseconds": 0.2944,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535008,
+        "elapsedMilliseconds": 0.2128,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535068,
+        "elapsedMilliseconds": 0.5586,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535068,
+        "elapsedMilliseconds": 0.8108,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535069,
+        "elapsedMilliseconds": 0.5316,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535113,
+        "elapsedMilliseconds": 0.3026,
+        "playerCount": 166,
+        "pendingJobs": 52
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535113,
+        "elapsedMilliseconds": 0.3081,
+        "playerCount": 167,
+        "pendingJobs": 38
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535114,
+        "elapsedMilliseconds": 0.283,
+        "playerCount": 167,
+        "pendingJobs": 51
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535160,
+        "elapsedMilliseconds": 0.818,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535160,
+        "elapsedMilliseconds": 0.8451,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535161,
+        "elapsedMilliseconds": 0.5963,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535206,
+        "elapsedMilliseconds": 0.3051,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535206,
+        "elapsedMilliseconds": 0.3161,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535206,
+        "elapsedMilliseconds": 0.2724,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535267,
+        "elapsedMilliseconds": 0.7569,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535267,
+        "elapsedMilliseconds": 0.7718,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535268,
+        "elapsedMilliseconds": 0.5026,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535313,
+        "elapsedMilliseconds": 0.5314,
+        "playerCount": 166,
+        "pendingJobs": 98
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535313,
+        "elapsedMilliseconds": 0.529,
+        "playerCount": 167,
+        "pendingJobs": 96
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535314,
+        "elapsedMilliseconds": 0.274,
+        "playerCount": 167,
+        "pendingJobs": 73
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535359,
+        "elapsedMilliseconds": 0.5303,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535359,
+        "elapsedMilliseconds": 0.9402,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535360,
+        "elapsedMilliseconds": 0.7431,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535420,
+        "elapsedMilliseconds": 0.2884,
+        "playerCount": 166,
+        "pendingJobs": 4
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535420,
+        "elapsedMilliseconds": 0.2801,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535420,
+        "elapsedMilliseconds": 0.282,
+        "playerCount": 167,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535466,
+        "elapsedMilliseconds": 0.8811,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535466,
+        "elapsedMilliseconds": 0.9383,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535467,
+        "elapsedMilliseconds": 0.4883,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535512,
+        "elapsedMilliseconds": 0.3031,
+        "playerCount": 166,
+        "pendingJobs": 45
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535512,
+        "elapsedMilliseconds": 0.2813,
+        "playerCount": 167,
+        "pendingJobs": 62
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535512,
+        "elapsedMilliseconds": 0.7097,
+        "playerCount": 167,
+        "pendingJobs": 85
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535558,
+        "elapsedMilliseconds": 0.7559,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535558,
+        "elapsedMilliseconds": 0.8422,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535559,
+        "elapsedMilliseconds": 0.7364,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535619,
+        "elapsedMilliseconds": 0.3601,
+        "playerCount": 167,
+        "pendingJobs": 66
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535619,
+        "elapsedMilliseconds": 0.5191,
+        "playerCount": 166,
+        "pendingJobs": 80
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535620,
+        "elapsedMilliseconds": 0.2973,
+        "playerCount": 167,
+        "pendingJobs": 47
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535664,
+        "elapsedMilliseconds": 0.5264,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535664,
+        "elapsedMilliseconds": 1.0136,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535665,
+        "elapsedMilliseconds": 0.5192,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535710,
+        "elapsedMilliseconds": 0.2139,
+        "playerCount": 167,
+        "pendingJobs": 4
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535710,
+        "elapsedMilliseconds": 0.2211,
+        "playerCount": 166,
+        "pendingJobs": 4
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535711,
+        "elapsedMilliseconds": 0.3548,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535771,
+        "elapsedMilliseconds": 0.8989,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535771,
+        "elapsedMilliseconds": 0.996,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535772,
+        "elapsedMilliseconds": 0.8632,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535818,
+        "elapsedMilliseconds": 0.399,
+        "playerCount": 167,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535818,
+        "elapsedMilliseconds": 0.7556,
+        "playerCount": 166,
+        "pendingJobs": 84
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535818,
+        "elapsedMilliseconds": 0.5033,
+        "playerCount": 167,
+        "pendingJobs": 100
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535863,
+        "elapsedMilliseconds": 0.5345,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535863,
+        "elapsedMilliseconds": 0.8272,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535864,
+        "elapsedMilliseconds": 0.4987,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535910,
+        "elapsedMilliseconds": 0.251,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535910,
+        "elapsedMilliseconds": 0.3904,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535910,
+        "elapsedMilliseconds": 0.2049,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281535970,
+        "elapsedMilliseconds": 0.5498,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281535970,
+        "elapsedMilliseconds": 0.5581,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281535971,
+        "elapsedMilliseconds": 0.5539,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536016,
+        "elapsedMilliseconds": 0.3522,
+        "playerCount": 167,
+        "pendingJobs": 73
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536016,
+        "elapsedMilliseconds": 0.382,
+        "playerCount": 166,
+        "pendingJobs": 60
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536017,
+        "elapsedMilliseconds": 0.325,
+        "playerCount": 167,
+        "pendingJobs": 67
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536062,
+        "elapsedMilliseconds": 0.5812,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536062,
+        "elapsedMilliseconds": 0.6819,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536062,
+        "elapsedMilliseconds": 0.5584,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536109,
+        "elapsedMilliseconds": 0.2322,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536109,
+        "elapsedMilliseconds": 0.2237,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536109,
+        "elapsedMilliseconds": 0.2043,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536170,
+        "elapsedMilliseconds": 0.6048,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536170,
+        "elapsedMilliseconds": 0.7333,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536170,
+        "elapsedMilliseconds": 0.584,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536217,
+        "elapsedMilliseconds": 0.3245,
+        "playerCount": 167,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536217,
+        "elapsedMilliseconds": 0.4447,
+        "playerCount": 166,
+        "pendingJobs": 80
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536217,
+        "elapsedMilliseconds": 0.4208,
+        "playerCount": 167,
+        "pendingJobs": 60
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536262,
+        "elapsedMilliseconds": 0.5564,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536262,
+        "elapsedMilliseconds": 0.6432,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536263,
+        "elapsedMilliseconds": 0.5195,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536308,
+        "elapsedMilliseconds": 0.28,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536308,
+        "elapsedMilliseconds": 0.3575,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536308,
+        "elapsedMilliseconds": 0.2595,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536368,
+        "elapsedMilliseconds": 0.7315,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536368,
+        "elapsedMilliseconds": 0.8841,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536369,
+        "elapsedMilliseconds": 0.6538,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536416,
+        "elapsedMilliseconds": 0.2792,
+        "playerCount": 167,
+        "pendingJobs": 42
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536416,
+        "elapsedMilliseconds": 0.572,
+        "playerCount": 166,
+        "pendingJobs": 91
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536416,
+        "elapsedMilliseconds": 0.322,
+        "playerCount": 167,
+        "pendingJobs": 37
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536462,
+        "elapsedMilliseconds": 0.96,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536462,
+        "elapsedMilliseconds": 1.3809,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536463,
+        "elapsedMilliseconds": 0.6503,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536507,
+        "elapsedMilliseconds": 0.2905,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536507,
+        "elapsedMilliseconds": 0.288,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536508,
+        "elapsedMilliseconds": 0.1972,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536568,
+        "elapsedMilliseconds": 0.704,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536568,
+        "elapsedMilliseconds": 0.947,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536569,
+        "elapsedMilliseconds": 0.6016,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536614,
+        "elapsedMilliseconds": 0.2843,
+        "playerCount": 166,
+        "pendingJobs": 37
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536614,
+        "elapsedMilliseconds": 0.5269,
+        "playerCount": 167,
+        "pendingJobs": 71
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536614,
+        "elapsedMilliseconds": 0.3113,
+        "playerCount": 167,
+        "pendingJobs": 35
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536659,
+        "elapsedMilliseconds": 0.7291,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536660,
+        "elapsedMilliseconds": 0.8017,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536659,
+        "elapsedMilliseconds": 1.7453,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536720,
+        "elapsedMilliseconds": 0.5294,
+        "playerCount": 166,
+        "pendingJobs": 160
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536720,
+        "elapsedMilliseconds": 0.5545,
+        "playerCount": 167,
+        "pendingJobs": 140
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536721,
+        "elapsedMilliseconds": 0.4608,
+        "playerCount": 167,
+        "pendingJobs": 122
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536765,
+        "elapsedMilliseconds": 0.5287,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536765,
+        "elapsedMilliseconds": 0.5511,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536766,
+        "elapsedMilliseconds": 0.4999,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536812,
+        "elapsedMilliseconds": 0.2896,
+        "playerCount": 166,
+        "pendingJobs": 54
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536812,
+        "elapsedMilliseconds": 0.2883,
+        "playerCount": 167,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536812,
+        "elapsedMilliseconds": 0.2905,
+        "playerCount": 167,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536858,
+        "elapsedMilliseconds": 0.6025,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536858,
+        "elapsedMilliseconds": 0.6184,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536858,
+        "elapsedMilliseconds": 0.5826,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536918,
+        "elapsedMilliseconds": 0.4351,
+        "playerCount": 167,
+        "pendingJobs": 74
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536918,
+        "elapsedMilliseconds": 0.5916,
+        "playerCount": 166,
+        "pendingJobs": 80
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536918,
+        "elapsedMilliseconds": 0.3625,
+        "playerCount": 167,
+        "pendingJobs": 72
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281536964,
+        "elapsedMilliseconds": 0.835,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281536964,
+        "elapsedMilliseconds": 0.8591,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281536965,
+        "elapsedMilliseconds": 0.6235,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537011,
+        "elapsedMilliseconds": 0.3978,
+        "playerCount": 166,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537011,
+        "elapsedMilliseconds": 0.6624,
+        "playerCount": 167,
+        "pendingJobs": 126
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537011,
+        "elapsedMilliseconds": 0.5349,
+        "playerCount": 167,
+        "pendingJobs": 82
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537057,
+        "elapsedMilliseconds": 0.6984,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537057,
+        "elapsedMilliseconds": 0.8091,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537057,
+        "elapsedMilliseconds": 0.8803,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537117,
+        "elapsedMilliseconds": 0.4635,
+        "playerCount": 167,
+        "pendingJobs": 79
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537117,
+        "elapsedMilliseconds": 0.4482,
+        "playerCount": 167,
+        "pendingJobs": 209
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537117,
+        "elapsedMilliseconds": 0.9701,
+        "playerCount": 166,
+        "pendingJobs": 84
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537163,
+        "elapsedMilliseconds": 0.6901,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537163,
+        "elapsedMilliseconds": 0.715,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537163,
+        "elapsedMilliseconds": 11.072,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537209,
+        "elapsedMilliseconds": 0.245,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537209,
+        "elapsedMilliseconds": 0.2706,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537209,
+        "elapsedMilliseconds": 0.2151,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537270,
+        "elapsedMilliseconds": 0.5505,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537270,
+        "elapsedMilliseconds": 0.9157,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537271,
+        "elapsedMilliseconds": 0.5614,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537315,
+        "elapsedMilliseconds": 0.2798,
+        "playerCount": 166,
+        "pendingJobs": 10
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537315,
+        "elapsedMilliseconds": 0.3362,
+        "playerCount": 167,
+        "pendingJobs": 8
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537315,
+        "elapsedMilliseconds": 0.3,
+        "playerCount": 167,
+        "pendingJobs": 52
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537361,
+        "elapsedMilliseconds": 0.6282,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537361,
+        "elapsedMilliseconds": 0.6673,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537362,
+        "elapsedMilliseconds": 0.6539,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537408,
+        "elapsedMilliseconds": 0.2345,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537408,
+        "elapsedMilliseconds": 0.4068,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537408,
+        "elapsedMilliseconds": 0.2043,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537468,
+        "elapsedMilliseconds": 0.5751,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537469,
+        "elapsedMilliseconds": 0.5361,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537468,
+        "elapsedMilliseconds": 1.222,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537514,
+        "elapsedMilliseconds": 0.2954,
+        "playerCount": 167,
+        "pendingJobs": 6
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537514,
+        "elapsedMilliseconds": 0.3588,
+        "playerCount": 166,
+        "pendingJobs": 4
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537514,
+        "elapsedMilliseconds": 0.3027,
+        "playerCount": 167,
+        "pendingJobs": 31
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537559,
+        "elapsedMilliseconds": 0.512,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537559,
+        "elapsedMilliseconds": 0.5472,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537560,
+        "elapsedMilliseconds": 0.5245,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537620,
+        "elapsedMilliseconds": 0.2852,
+        "playerCount": 167,
+        "pendingJobs": 44
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537620,
+        "elapsedMilliseconds": 0.5608,
+        "playerCount": 166,
+        "pendingJobs": 110
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537621,
+        "elapsedMilliseconds": 0.3065,
+        "playerCount": 167,
+        "pendingJobs": 47
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537666,
+        "elapsedMilliseconds": 0.6899,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537666,
+        "elapsedMilliseconds": 1.0249,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537667,
+        "elapsedMilliseconds": 0.655,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537713,
+        "elapsedMilliseconds": 0.284,
+        "playerCount": 166,
+        "pendingJobs": 31
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537713,
+        "elapsedMilliseconds": 0.285,
+        "playerCount": 167,
+        "pendingJobs": 25
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537713,
+        "elapsedMilliseconds": 0.2839,
+        "playerCount": 167,
+        "pendingJobs": 48
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537759,
+        "elapsedMilliseconds": 0.5097,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537759,
+        "elapsedMilliseconds": 0.5712,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537760,
+        "elapsedMilliseconds": 0.5084,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537806,
+        "elapsedMilliseconds": 0.28,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537806,
+        "elapsedMilliseconds": 0.3181,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537806,
+        "elapsedMilliseconds": 0.2258,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537866,
+        "elapsedMilliseconds": 0.5231,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537866,
+        "elapsedMilliseconds": 0.5554,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537867,
+        "elapsedMilliseconds": 0.4852,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537912,
+        "elapsedMilliseconds": 0.2692,
+        "playerCount": 166,
+        "pendingJobs": 22
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537912,
+        "elapsedMilliseconds": 0.3088,
+        "playerCount": 167,
+        "pendingJobs": 16
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537912,
+        "elapsedMilliseconds": 0.7994,
+        "playerCount": 167,
+        "pendingJobs": 127
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281537958,
+        "elapsedMilliseconds": 0.756,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281537958,
+        "elapsedMilliseconds": 0.9343,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281537959,
+        "elapsedMilliseconds": 0.5427,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538019,
+        "elapsedMilliseconds": 0.3468,
+        "playerCount": 167,
+        "pendingJobs": 59
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538019,
+        "elapsedMilliseconds": 0.4892,
+        "playerCount": 166,
+        "pendingJobs": 82
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538019,
+        "elapsedMilliseconds": 0.2869,
+        "playerCount": 167,
+        "pendingJobs": 68
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538064,
+        "elapsedMilliseconds": 0.527,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538064,
+        "elapsedMilliseconds": 0.6926,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538065,
+        "elapsedMilliseconds": 0.544,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538111,
+        "elapsedMilliseconds": 0.2558,
+        "playerCount": 166,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538111,
+        "elapsedMilliseconds": 0.3013,
+        "playerCount": 167,
+        "pendingJobs": 67
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538112,
+        "elapsedMilliseconds": 0.2645,
+        "playerCount": 167,
+        "pendingJobs": 58
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538157,
+        "elapsedMilliseconds": 0.5687,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538157,
+        "elapsedMilliseconds": 0.6974,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538158,
+        "elapsedMilliseconds": 0.5411,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538218,
+        "elapsedMilliseconds": 0.4246,
+        "playerCount": 166,
+        "pendingJobs": 68
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538218,
+        "elapsedMilliseconds": 0.4431,
+        "playerCount": 167,
+        "pendingJobs": 148
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538218,
+        "elapsedMilliseconds": 1.2246,
+        "playerCount": 167,
+        "pendingJobs": 92
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538264,
+        "elapsedMilliseconds": 0.653,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538264,
+        "elapsedMilliseconds": 0.9529,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538265,
+        "elapsedMilliseconds": 0.5592,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538310,
+        "elapsedMilliseconds": 0.2794,
+        "playerCount": 166,
+        "pendingJobs": 4
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538310,
+        "elapsedMilliseconds": 0.2973,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538311,
+        "elapsedMilliseconds": 0.2163,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538357,
+        "elapsedMilliseconds": 0.547,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538357,
+        "elapsedMilliseconds": 0.5462,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538357,
+        "elapsedMilliseconds": 0.4922,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538417,
+        "elapsedMilliseconds": 0.4097,
+        "playerCount": 167,
+        "pendingJobs": 75
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538417,
+        "elapsedMilliseconds": 0.4229,
+        "playerCount": 166,
+        "pendingJobs": 60
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538417,
+        "elapsedMilliseconds": 0.3524,
+        "playerCount": 167,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538462,
+        "elapsedMilliseconds": 0.5001,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538462,
+        "elapsedMilliseconds": 0.7005,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538463,
+        "elapsedMilliseconds": 0.5182,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538508,
+        "elapsedMilliseconds": 0.2955,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538508,
+        "elapsedMilliseconds": 0.3279,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538508,
+        "elapsedMilliseconds": 0.2697,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538568,
+        "elapsedMilliseconds": 0.6953,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538568,
+        "elapsedMilliseconds": 0.9748,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538569,
+        "elapsedMilliseconds": 0.5421,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538614,
+        "elapsedMilliseconds": 0.4058,
+        "playerCount": 167,
+        "pendingJobs": 66
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538614,
+        "elapsedMilliseconds": 0.4209,
+        "playerCount": 166,
+        "pendingJobs": 45
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538614,
+        "elapsedMilliseconds": 0.7614,
+        "playerCount": 167,
+        "pendingJobs": 112
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538660,
+        "elapsedMilliseconds": 0.497,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538660,
+        "elapsedMilliseconds": 0.7494,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538660,
+        "elapsedMilliseconds": 0.519,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538707,
+        "elapsedMilliseconds": 0.2105,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538707,
+        "elapsedMilliseconds": 0.203,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538707,
+        "elapsedMilliseconds": 0.1905,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538768,
+        "elapsedMilliseconds": 0.6431,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538768,
+        "elapsedMilliseconds": 0.6676,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538769,
+        "elapsedMilliseconds": 0.6099,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538814,
+        "elapsedMilliseconds": 0.2936,
+        "playerCount": 166,
+        "pendingJobs": 25
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538814,
+        "elapsedMilliseconds": 0.5697,
+        "playerCount": 167,
+        "pendingJobs": 49
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538814,
+        "elapsedMilliseconds": 0.3228,
+        "playerCount": 167,
+        "pendingJobs": 21
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538860,
+        "elapsedMilliseconds": 0.5744,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538860,
+        "elapsedMilliseconds": 0.6368,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538861,
+        "elapsedMilliseconds": 0.5504,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538921,
+        "elapsedMilliseconds": 0.5141,
+        "playerCount": 166,
+        "pendingJobs": 144
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538921,
+        "elapsedMilliseconds": 0.515,
+        "playerCount": 167,
+        "pendingJobs": 115
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538922,
+        "elapsedMilliseconds": 0.2952,
+        "playerCount": 167,
+        "pendingJobs": 156
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281538966,
+        "elapsedMilliseconds": 0.5581,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281538966,
+        "elapsedMilliseconds": 0.6928,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281538967,
+        "elapsedMilliseconds": 0.5101,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539012,
+        "elapsedMilliseconds": 0.4127,
+        "playerCount": 166,
+        "pendingJobs": 47
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539012,
+        "elapsedMilliseconds": 0.5314,
+        "playerCount": 167,
+        "pendingJobs": 59
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539013,
+        "elapsedMilliseconds": 0.5528,
+        "playerCount": 167,
+        "pendingJobs": 113
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539059,
+        "elapsedMilliseconds": 0.5251,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539059,
+        "elapsedMilliseconds": 1.0168,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539059,
+        "elapsedMilliseconds": 0.5769,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539106,
+        "elapsedMilliseconds": 0.3899,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539106,
+        "elapsedMilliseconds": 0.3824,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539106,
+        "elapsedMilliseconds": 0.3962,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539166,
+        "elapsedMilliseconds": 0.6262,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539166,
+        "elapsedMilliseconds": 1.0366,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539167,
+        "elapsedMilliseconds": 0.5255,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539211,
+        "elapsedMilliseconds": 0.3578,
+        "playerCount": 166,
+        "pendingJobs": 56
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539211,
+        "elapsedMilliseconds": 0.3133,
+        "playerCount": 167,
+        "pendingJobs": 43
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539211,
+        "elapsedMilliseconds": 0.4893,
+        "playerCount": 167,
+        "pendingJobs": 145
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539270,
+        "elapsedMilliseconds": 0.5667,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539270,
+        "elapsedMilliseconds": 0.6155,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539271,
+        "elapsedMilliseconds": 0.5314,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539317,
+        "elapsedMilliseconds": 0.3919,
+        "playerCount": 166,
+        "pendingJobs": 63
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539317,
+        "elapsedMilliseconds": 0.3932,
+        "playerCount": 167,
+        "pendingJobs": 44
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539317,
+        "elapsedMilliseconds": 0.3461,
+        "playerCount": 167,
+        "pendingJobs": 102
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539362,
+        "elapsedMilliseconds": 0.529,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539362,
+        "elapsedMilliseconds": 0.5697,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539362,
+        "elapsedMilliseconds": 0.5163,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539409,
+        "elapsedMilliseconds": 0.3149,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539409,
+        "elapsedMilliseconds": 0.3127,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539409,
+        "elapsedMilliseconds": 0.3064,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539469,
+        "elapsedMilliseconds": 0.6751,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539469,
+        "elapsedMilliseconds": 0.7838,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539470,
+        "elapsedMilliseconds": 0.6473,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539516,
+        "elapsedMilliseconds": 0.3605,
+        "playerCount": 166,
+        "pendingJobs": 83
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539516,
+        "elapsedMilliseconds": 0.3608,
+        "playerCount": 167,
+        "pendingJobs": 56
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539516,
+        "elapsedMilliseconds": 0.3347,
+        "playerCount": 167,
+        "pendingJobs": 106
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539562,
+        "elapsedMilliseconds": 0.6066,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539562,
+        "elapsedMilliseconds": 0.6179,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539563,
+        "elapsedMilliseconds": 0.5353,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539608,
+        "elapsedMilliseconds": 0.2165,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539608,
+        "elapsedMilliseconds": 0.2387,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539608,
+        "elapsedMilliseconds": 0.2076,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539669,
+        "elapsedMilliseconds": 0.59,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539669,
+        "elapsedMilliseconds": 0.6132,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539670,
+        "elapsedMilliseconds": 0.5542,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539715,
+        "elapsedMilliseconds": 0.3125,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539715,
+        "elapsedMilliseconds": 0.3207,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539715,
+        "elapsedMilliseconds": 0.3226,
+        "playerCount": 167,
+        "pendingJobs": 61
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539760,
+        "elapsedMilliseconds": 0.6738,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539760,
+        "elapsedMilliseconds": 4.1868,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539761,
+        "elapsedMilliseconds": 4.5896,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539806,
+        "elapsedMilliseconds": 0.3127,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539806,
+        "elapsedMilliseconds": 0.3545,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539807,
+        "elapsedMilliseconds": 0.2155,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539866,
+        "elapsedMilliseconds": 0.9635,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539866,
+        "elapsedMilliseconds": 0.9844,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539867,
+        "elapsedMilliseconds": 0.6986,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539912,
+        "elapsedMilliseconds": 0.299,
+        "playerCount": 167,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539912,
+        "elapsedMilliseconds": 0.3365,
+        "playerCount": 166,
+        "pendingJobs": 47
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539912,
+        "elapsedMilliseconds": 0.2814,
+        "playerCount": 167,
+        "pendingJobs": 35
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281539958,
+        "elapsedMilliseconds": 0.9574,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281539958,
+        "elapsedMilliseconds": 0.9863,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281539959,
+        "elapsedMilliseconds": 0.646,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540019,
+        "elapsedMilliseconds": 0.2721,
+        "playerCount": 167,
+        "pendingJobs": 11
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540019,
+        "elapsedMilliseconds": 0.3212,
+        "playerCount": 166,
+        "pendingJobs": 8
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540020,
+        "elapsedMilliseconds": 0.2888,
+        "playerCount": 167,
+        "pendingJobs": 77
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540064,
+        "elapsedMilliseconds": 1.1894,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540064,
+        "elapsedMilliseconds": 1.3699,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540065,
+        "elapsedMilliseconds": 0.4697,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540110,
+        "elapsedMilliseconds": 0.1917,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540110,
+        "elapsedMilliseconds": 0.2033,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540110,
+        "elapsedMilliseconds": 0.1949,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540171,
+        "elapsedMilliseconds": 0.5171,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540171,
+        "elapsedMilliseconds": 0.8619,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540172,
+        "elapsedMilliseconds": 0.4967,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540218,
+        "elapsedMilliseconds": 0.5049,
+        "playerCount": 166,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540218,
+        "elapsedMilliseconds": 0.5291,
+        "playerCount": 167,
+        "pendingJobs": 46
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540218,
+        "elapsedMilliseconds": 0.2811,
+        "playerCount": 167,
+        "pendingJobs": 37
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540263,
+        "elapsedMilliseconds": 0.8908,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540263,
+        "elapsedMilliseconds": 0.9483,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540264,
+        "elapsedMilliseconds": 1.1541,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540309,
+        "elapsedMilliseconds": 0.2167,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540309,
+        "elapsedMilliseconds": 0.3707,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540309,
+        "elapsedMilliseconds": 0.1964,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540370,
+        "elapsedMilliseconds": 0.6215,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540370,
+        "elapsedMilliseconds": 0.7257,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540370,
+        "elapsedMilliseconds": 0.5436,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540416,
+        "elapsedMilliseconds": 0.2709,
+        "playerCount": 166,
+        "pendingJobs": 50
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540416,
+        "elapsedMilliseconds": 0.3571,
+        "playerCount": 167,
+        "pendingJobs": 51
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540416,
+        "elapsedMilliseconds": 0.2878,
+        "playerCount": 167,
+        "pendingJobs": 67
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540462,
+        "elapsedMilliseconds": 0.4934,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540462,
+        "elapsedMilliseconds": 0.9133,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540462,
+        "elapsedMilliseconds": 0.4792,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540507,
+        "elapsedMilliseconds": 0.1881,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540507,
+        "elapsedMilliseconds": 0.2398,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540507,
+        "elapsedMilliseconds": 0.1871,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540568,
+        "elapsedMilliseconds": 0.8333,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540568,
+        "elapsedMilliseconds": 0.9155,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540569,
+        "elapsedMilliseconds": 0.5139,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540615,
+        "elapsedMilliseconds": 0.2619,
+        "playerCount": 167,
+        "pendingJobs": 81
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540615,
+        "elapsedMilliseconds": 0.4598,
+        "playerCount": 166,
+        "pendingJobs": 120
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540615,
+        "elapsedMilliseconds": 0.2606,
+        "playerCount": 167,
+        "pendingJobs": 67
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540660,
+        "elapsedMilliseconds": 0.5063,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540660,
+        "elapsedMilliseconds": 0.5368,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540661,
+        "elapsedMilliseconds": 0.6526,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540706,
+        "elapsedMilliseconds": 0.2856,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540706,
+        "elapsedMilliseconds": 0.3259,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540706,
+        "elapsedMilliseconds": 0.179,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540765,
+        "elapsedMilliseconds": 0.4602,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540765,
+        "elapsedMilliseconds": 0.5159,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540765,
+        "elapsedMilliseconds": 0.9968,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540811,
+        "elapsedMilliseconds": 0.3977,
+        "playerCount": 166,
+        "pendingJobs": 49
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540811,
+        "elapsedMilliseconds": 0.2807,
+        "playerCount": 167,
+        "pendingJobs": 119
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540811,
+        "elapsedMilliseconds": 1.4785,
+        "playerCount": 167,
+        "pendingJobs": 128
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540857,
+        "elapsedMilliseconds": 0.4924,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540857,
+        "elapsedMilliseconds": 0.6128,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540857,
+        "elapsedMilliseconds": 0.5869,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540918,
+        "elapsedMilliseconds": 0.4231,
+        "playerCount": 167,
+        "pendingJobs": 77
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540918,
+        "elapsedMilliseconds": 0.4518,
+        "playerCount": 166,
+        "pendingJobs": 51
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540919,
+        "elapsedMilliseconds": 0.5285,
+        "playerCount": 167,
+        "pendingJobs": 68
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281540963,
+        "elapsedMilliseconds": 0.5286,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281540963,
+        "elapsedMilliseconds": 0.5387,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281540964,
+        "elapsedMilliseconds": 0.5308,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541009,
+        "elapsedMilliseconds": 0.2721,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541009,
+        "elapsedMilliseconds": 0.292,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541009,
+        "elapsedMilliseconds": 0.2527,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541069,
+        "elapsedMilliseconds": 0.4834,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541069,
+        "elapsedMilliseconds": 0.531,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541070,
+        "elapsedMilliseconds": 0.5077,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541115,
+        "elapsedMilliseconds": 0.3008,
+        "playerCount": 167,
+        "pendingJobs": 71
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541115,
+        "elapsedMilliseconds": 0.3122,
+        "playerCount": 166,
+        "pendingJobs": 50
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541115,
+        "elapsedMilliseconds": 0.2819,
+        "playerCount": 167,
+        "pendingJobs": 66
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541159,
+        "elapsedMilliseconds": 0.4968,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541159,
+        "elapsedMilliseconds": 0.8601,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541160,
+        "elapsedMilliseconds": 0.5295,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541206,
+        "elapsedMilliseconds": 0.3645,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541206,
+        "elapsedMilliseconds": 0.4288,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541206,
+        "elapsedMilliseconds": 0.3625,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541266,
+        "elapsedMilliseconds": 0.5554,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541266,
+        "elapsedMilliseconds": 0.5705,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541267,
+        "elapsedMilliseconds": 0.5267,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541313,
+        "elapsedMilliseconds": 0.3839,
+        "playerCount": 167,
+        "pendingJobs": 49
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541313,
+        "elapsedMilliseconds": 0.4018,
+        "playerCount": 166,
+        "pendingJobs": 36
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541314,
+        "elapsedMilliseconds": 0.391,
+        "playerCount": 167,
+        "pendingJobs": 64
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541358,
+        "elapsedMilliseconds": 0.7837,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541359,
+        "elapsedMilliseconds": 0.5477,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541358,
+        "elapsedMilliseconds": 1.3575,
+        "playerCount": 166,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541419,
+        "elapsedMilliseconds": 0.3137,
+        "playerCount": 167,
+        "pendingJobs": 63
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541420,
+        "elapsedMilliseconds": 0.3046,
+        "playerCount": 167,
+        "pendingJobs": 132
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541419,
+        "elapsedMilliseconds": 1.0263,
+        "playerCount": 166,
+        "pendingJobs": 87
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541465,
+        "elapsedMilliseconds": 0.5085,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541465,
+        "elapsedMilliseconds": 1.0054,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541466,
+        "elapsedMilliseconds": 0.4969,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541511,
+        "elapsedMilliseconds": 0.2667,
+        "playerCount": 166,
+        "pendingJobs": 46
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541511,
+        "elapsedMilliseconds": 0.2739,
+        "playerCount": 167,
+        "pendingJobs": 35
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541511,
+        "elapsedMilliseconds": 0.2522,
+        "playerCount": 167,
+        "pendingJobs": 92
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541557,
+        "elapsedMilliseconds": 0.4817,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541557,
+        "elapsedMilliseconds": 0.5511,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541558,
+        "elapsedMilliseconds": 0.4925,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541619,
+        "elapsedMilliseconds": 0.2989,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541619,
+        "elapsedMilliseconds": 0.3582,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541620,
+        "elapsedMilliseconds": 0.2625,
+        "playerCount": 167,
+        "pendingJobs": 102
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541665,
+        "elapsedMilliseconds": 0.4689,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541665,
+        "elapsedMilliseconds": 0.5073,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541666,
+        "elapsedMilliseconds": 0.4777,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541712,
+        "elapsedMilliseconds": 0.5206,
+        "playerCount": 166,
+        "pendingJobs": 132
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541712,
+        "elapsedMilliseconds": 0.8325,
+        "playerCount": 167,
+        "pendingJobs": 100
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541712,
+        "elapsedMilliseconds": 0.4921,
+        "playerCount": 167,
+        "pendingJobs": 56
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541757,
+        "elapsedMilliseconds": 0.8353,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541757,
+        "elapsedMilliseconds": 0.9004,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541758,
+        "elapsedMilliseconds": 0.5017,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541817,
+        "elapsedMilliseconds": 0.5467,
+        "playerCount": 166,
+        "pendingJobs": 102
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541817,
+        "elapsedMilliseconds": 0.9581,
+        "playerCount": 167,
+        "pendingJobs": 148
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541818,
+        "elapsedMilliseconds": 0.6423,
+        "playerCount": 167,
+        "pendingJobs": 117
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541862,
+        "elapsedMilliseconds": 0.5229,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541862,
+        "elapsedMilliseconds": 0.5457,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541863,
+        "elapsedMilliseconds": 0.5504,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541909,
+        "elapsedMilliseconds": 0.2047,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541909,
+        "elapsedMilliseconds": 0.2507,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541909,
+        "elapsedMilliseconds": 0.1913,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281541971,
+        "elapsedMilliseconds": 0.5289,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281541971,
+        "elapsedMilliseconds": 0.7053,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281541971,
+        "elapsedMilliseconds": 0.534,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281542017,
+        "elapsedMilliseconds": 0.2907,
+        "playerCount": 167,
+        "pendingJobs": 61
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281542017,
+        "elapsedMilliseconds": 0.3738,
+        "playerCount": 166,
+        "pendingJobs": 41
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281542017,
+        "elapsedMilliseconds": 0.2834,
+        "playerCount": 167,
+        "pendingJobs": 53
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281542062,
+        "elapsedMilliseconds": 0.4963,
+        "playerCount": 166,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281542063,
+        "elapsedMilliseconds": 0.5211,
+        "playerCount": 167,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281542062,
+        "elapsedMilliseconds": 1.0571,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281542108,
+        "elapsedMilliseconds": 0.2174,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281542108,
+        "elapsedMilliseconds": 0.3619,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281542108,
+        "elapsedMilliseconds": 0.193,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281542168,
+        "elapsedMilliseconds": 0.7404,
+        "playerCount": 167,
+        "pendingJobs": 3
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281542168,
+        "elapsedMilliseconds": 0.8548,
+        "playerCount": 166,
+        "pendingJobs": 2
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281542169,
+        "elapsedMilliseconds": 0.8829,
+        "playerCount": 167,
+        "pendingJobs": 1
+      },
+      {
+        "roomId": 3,
+        "timestampUtcMilliseconds": 1793281542214,
+        "elapsedMilliseconds": 0.2912,
+        "playerCount": 166,
+        "pendingJobs": 39
+      },
+      {
+        "roomId": 2,
+        "timestampUtcMilliseconds": 1793281542214,
+        "elapsedMilliseconds": 0.5943,
+        "playerCount": 167,
+        "pendingJobs": 70
+      },
+      {
+        "roomId": 1,
+        "timestampUtcMilliseconds": 1793281542214,
+        "elapsedMilliseconds": 0.3598,
+        "playerCount": 167,
+        "pendingJobs": 30
+      }
+    ]
+  },
+  "server": {
+    "environment": {
+      "framework": ".NET 8.0.31",
+      "os": "Microsoft Windows 10.0.26200",
+      "processorCount": 16,
+      "assemblyMvid": "9764454a-80f1-4aeb-a224-0d4f7b2a6fae"
+    },
+    "lifetimeTraffic": {
+      "packetsSent": 1090727,
+      "bytesSent": 34464390,
+      "socketWrites": 1090727
+    },
+    "totalRecorded": 4620.0,
+    "retainedCount": 4620.0,
+    "droppedCount": 0.0,
+    "activeSessions": 0.0,
+    "pendingJobs": 0.0,
+    "pendingPersistence": 0.0,
+    "sessionErrors": 0.0,
+    "jobErrors": 0.0,
+    "shutdownErrors": 0
+  },
+  "assemblyHashes": {
+    "Game/bin/Release/net8.0/Game.dll": "AB2CA658AB1A870EA0E5AF4258824BF11E57228DCC87DC9949D6B74D8E768870",
+    "Game/bin/Release/net8.0/Common.dll": "A5DA0B5A07786239B26A9B80027C68E4BB0DB1521DC28CD34BABE961E3AB8164",
+    "Login/bin/Release/net8.0/Login.dll": "36C8F834964A2DEF3BF50ED12E2D79902AC9F92F0A73E86F4B4C3B0548AA3FE4",
+    "LoadClient/bin/Release/net8.0/LoadClient.dll": "E43F9FC913AED837B9B1C60FC1A18C1373156B07BAF92DCA3B9DA8B77D4B55CF"
+  },
+  "clientExitCode": 0,
+  "demoExitCode": 0,
+  "finishedUtc": "2026-10-29T13:46:47.3385854+00:00",
+  "measurementNotes": [
+    "Game and LoadClient ran on the same Windows machine. Tick execution includes movement, AOI, serialization and outbound enqueue; pending jobs are recorded separately.",
+    "window.runtime is the difference between the first and last server runtime samples (100ms interval) inside the client measurement window. CPU is the Game process total processor time; allocation is GC.GetTotalAllocatedBytes.",
+    "Baseline: commit a365e41 plus runtime instrumentation only (RuntimeMetrics, socket write counter). One socket write per packet; per-tick collections and per-packet temporary arrays. Median CPU run of three."
+  ]
+}

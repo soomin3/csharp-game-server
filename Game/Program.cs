@@ -38,6 +38,7 @@ static async Task<int> RunServerAsync(ServerOptions options)
     RoomManager manager = new RoomManager(scheduler, options.Rooms, store);
     TickMetrics metrics = new TickMetrics();
     foreach (GameRoom room in manager.Rooms) room.Metrics = metrics;
+    RuntimeMetrics? runtimeMetrics = options.MetricsPath != null ? new RuntimeMetrics(TimeSpan.FromMilliseconds(100)) : null;
     GameHandler handler = new GameHandler(manager, tokens);
     SessionOptions sessionOptions = new SessionOptions { MaxPendingPackets = options.SendPackets, MaxPendingBytes = options.SendBytes };
     TServer server = new TServer(options.Port, client => new GameSession(client, handler, sessionOptions));
@@ -79,11 +80,22 @@ static async Task<int> RunServerAsync(ServerOptions options)
         {
             await CleanupAsync("측정 결과 기록", async () =>
             {
+                await runtimeMetrics!.DisposeAsync();
                 var report = new
                 {
                     capturedUtc = DateTimeOffset.UtcNow,
                     metrics = metrics.Snapshot(),
-                    traffic = new { packetsSent = TSession.TotalPacketsSent, bytesSent = TSession.TotalBytesSent },
+                    runtime = new
+                    {
+                        gcServer = System.Runtime.GCSettings.IsServerGC,
+                        droppedCount = runtimeMetrics.DroppedCount,
+                        samples = runtimeMetrics.Snapshot()
+                    },
+                    traffic = new
+                    {
+                        packetsSent = TSession.TotalPacketsSent, bytesSent = TSession.TotalBytesSent,
+                        socketWrites = TSession.TotalSocketWrites
+                    },
                     activeSessions = server.ActiveSessionCount,
                     pendingJobs = scheduler.PendingJobCount,
                     pendingPersistence = manager.PendingPersistenceCount,

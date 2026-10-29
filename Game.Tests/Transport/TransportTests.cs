@@ -77,6 +77,37 @@ namespace Queue.Tests
         }
 
         [Fact]
+        public async Task 쌓인_패킷은_순서대로_묶어_쓰고_묶음보다_큰_패킷은_단독으로_쓴다()
+        {
+            using ConnectedSockets sockets = await ConnectedSockets.CreateAsync();
+            using CancellationTokenSource cancellation = new CancellationTokenSource();
+            ProbeSession session = new ProbeSession(sockets.Server, new SessionOptions { SendBatchBytes = 64 });
+            List<byte[]> packets = new List<byte[]>();
+            for (int i = 0; i < 20; i++)
+            {
+                // 7번과 15번은 묶음 버퍼보다 크다. 나머지는 경계를 넘는 위치가 계속 달라지게 크기를 바꾼다.
+                byte[] packet = new byte[i == 7 || i == 15 ? 200 : 10 + i];
+                packet.AsSpan().Fill((byte)(i + 1));
+                packets.Add(packet);
+                // 송신 루프 시작 전에 넣어 두어 묶음 구성이 실행 시점에 따라 달라지지 않게 한다.
+                session.SendPacket(packet);
+            }
+            byte[] expected = packets.SelectMany(packet => packet).ToArray();
+
+            Task running = session.RunAsync(cancellation.Token);
+            byte[] received = new byte[expected.Length];
+            await sockets.Client.GetStream().ReadExactlyAsync(received).AsTask().WaitAsync(Timeout);
+            await WaitUntilAsync(() => session.PendingSendPackets == 0);
+
+            Assert.Equal(expected, received);
+            Assert.Equal(0, session.PendingSendBytes);
+            // 60 / 31 / 200 / 57 / 43 / 47 / 200 / 53 / 57바이트의 9번 쓰기
+            Assert.Equal(9, session.SocketWriteCount);
+            cancellation.Cancel();
+            await running.WaitAsync(Timeout);
+        }
+
+        [Fact]
         public async Task 상대_EOF를_관측하면_세션_작업을_명단에서_제거한다()
         {
             await using TestServer host = new TestServer();

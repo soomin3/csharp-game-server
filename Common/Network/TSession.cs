@@ -9,15 +9,20 @@ namespace Common.Network
         private readonly byte[] _readBuffer = new byte[4096];
         private readonly byte[] _recvBuffer = new byte[ushort.MaxValue];
         private readonly OutgoingPacketQueue _outgoing;
+        private readonly int _sendBatchBytes;
+        private long _sessionSocketWrites;
         private int _recvSize;
         private int _disconnected;
         private int _started;
         private static long _packetsSent;
         private static long _bytesSent;
+        private static long _socketWrites;
 
         public static long TotalPacketsSent => Interlocked.Read(ref _packetsSent);
         public static long TotalBytesSent => Interlocked.Read(ref _bytesSent);
+        public static long TotalSocketWrites => Interlocked.Read(ref _socketWrites);
 
+        public long SocketWriteCount => Interlocked.Read(ref _sessionSocketWrites);
         public bool IsDisconnected => Volatile.Read(ref _disconnected) != 0;
         public int PendingSendPackets => _outgoing.PendingPackets;
         public int PendingSendBytes => _outgoing.PendingBytes;
@@ -27,6 +32,7 @@ namespace Common.Network
             _client = client;
             _stream = client.GetStream();
             _outgoing = new OutgoingPacketQueue(options);
+            _sendBatchBytes = (options ?? new SessionOptions()).SendBatchBytes;
         }
 
         public async Task RunAsync(CancellationToken cancellationToken = default)
@@ -128,17 +134,47 @@ namespace Common.Network
             }
         }
 
+        // 이미 쌓인 패킷을 한 버퍼에 모아 소켓 쓰기 한 번으로 보낸다. 틱 하나에서 관찰자에게
+        // 여러 알림이 몰리므로 패킷마다 쓰던 시스템 호출 수가 묶음 수로 줄어든다.
+        // 묶은 패킷은 쓰기가 끝난 뒤 Dispose해 진행 중인 쓰기도 송신 한도에 계속 포함한다.
         private async Task SendLoopAsync(CancellationToken cancellationToken)
         {
+            byte[] batch = new byte[_sendBatchBytes];
+            List<OutgoingPacket> batched = new List<OutgoingPacket>();
+            OutgoingPacket? next = null;
             try
             {
-                await foreach (OutgoingPacket packet in _outgoing.ReadAllAsync(cancellationToken))
+                while (next != null || await _outgoing.WaitToReadAsync(cancellationToken))
                 {
-                    using (packet)
+                    int length = 0;
+                    while (next != null || _outgoing.TryRead(out next))
                     {
-                        await _stream.WriteAsync(packet.Data, cancellationToken);
-                        Interlocked.Increment(ref _packetsSent);
-                        Interlocked.Add(ref _bytesSent, packet.Data.Length);
+                        ReadOnlyMemory<byte> data = next.Data;
+                        if (data.Length > batch.Length - length)
+                        {
+                            if (length > 0)
+                            {
+                                // 남는 공간에 들어가지 않으면 다음 묶음의 첫 패킷으로 남긴다.
+                                break;
+                            }
+
+                            // 묶음 버퍼보다 큰 패킷은 복사하지 않고 단독으로 쓴다.
+                            await WriteAsync(data, 1, cancellationToken);
+                            next.Dispose();
+                            next = null;
+                            continue;
+                        }
+
+                        data.Span.CopyTo(batch.AsSpan(length));
+                        length += data.Length;
+                        batched.Add(next);
+                        next = null;
+                    }
+
+                    if (length > 0)
+                    {
+                        await WriteAsync(batch.AsMemory(0, length), batched.Count, cancellationToken);
+                        DisposeAll(batched);
                     }
                 }
             }
@@ -150,6 +186,29 @@ namespace Common.Network
             {
                 Disconnect();
             }
+            finally
+            {
+                next?.Dispose();
+                DisposeAll(batched);
+            }
+        }
+
+        private async ValueTask WriteAsync(ReadOnlyMemory<byte> data, int packetCount, CancellationToken cancellationToken)
+        {
+            await _stream.WriteAsync(data, cancellationToken);
+            Interlocked.Increment(ref _sessionSocketWrites);
+            Interlocked.Increment(ref _socketWrites);
+            Interlocked.Add(ref _packetsSent, packetCount);
+            Interlocked.Add(ref _bytesSent, data.Length);
+        }
+
+        private static void DisposeAll(List<OutgoingPacket> packets)
+        {
+            foreach (OutgoingPacket packet in packets)
+            {
+                packet.Dispose();
+            }
+            packets.Clear();
         }
 
         protected abstract void OnSessionConnected();

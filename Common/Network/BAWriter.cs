@@ -38,10 +38,9 @@ namespace Common.Network
             ArgumentNullException.ThrowIfNull(value);
             int byteCount = StrictUtf8.GetByteCount(value);
             EnsureWritable(checked(sizeof(int) + byteCount));
-            byte[] text = StrictUtf8.GetBytes(value);
-            PutInt(text.Length);
-            text.CopyTo(_bytes, _offset);
-            _offset += text.Length;
+            PutInt(byteCount);
+            // 임시 배열 없이 패킷 버퍼에 바로 인코딩한다.
+            _offset += StrictUtf8.GetBytes(value, _bytes.AsSpan(_offset, byteCount));
         }
 
         public byte[] ToPacket(PacketId id)
@@ -49,7 +48,8 @@ namespace Common.Network
             EnsureWritable(0);
             BinaryPrimitives.WriteUInt16LittleEndian(_bytes.AsSpan(0), (ushort)_offset);
             BinaryPrimitives.WriteUInt16LittleEndian(_bytes.AsSpan(PacketHeader.LengthSize), (ushort)id);
-            return _bytes.AsSpan(0, _offset).ToArray();
+            // 생성 코드는 본문 크기를 정확히 계산하므로 보통 버퍼를 그대로 넘기고, 남는 공간이 있을 때만 잘라 복사한다.
+            return _offset == _bytes.Length ? _bytes : _bytes.AsSpan(0, _offset).ToArray();
         }
 
         private void EnsureWritable(int size)
